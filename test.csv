@@ -1,0 +1,77 @@
+question_id,question
+1,"[Question]: 2.  Battery life has been measured as normally distributed with a mean  equal to 150 hours and a variance of 400 hours. Find the B10 life.
+
+[Choices]: [a] 128.1 hrs  | [b] 124.4 hrs  | [c] 122.6hrs | [d] 110hrs"
+2,"[Question]: 3.  Failure rate data is acquired from MIL-HDBK-217 for reliability  modeling of a new circuit board design. The failure rate for the entire  circuit board is acquired by summing the MIL-HDBK-217 failure rates for  each component on the circuit board. The most likely assumptions made by  the engineer for this analysis are that individual component failure  rates are _____ with time and are modeled in a ______ configuration. 
+
+[Choices]: [a] Constant; series  | [b]  Decreasing; series | [c]  Increasing; series | [d]  Constant; parallel"
+3,"[Question]: 4.  Each of the following test acceleration models is most often  used with only one varying stress type, except for which?
+
+[Choices]: [a] Arrhenius | [b] Coffin-Manson | [c] Inverse Power Law  | [d] Eyring"
+4,"[Question]: 8.  Sample Variance of resistance for the 20-unit sample of electronic  components was 4 ohms. 95% confidence interval for the population  variance is: 
+
+[Choices]: [a] 2.31  $ \leq $   $ \sigma $ 2  $ \leq $  8.53  | [b] 2.93  $ \leq $   $ \sigma $ 2  $ \leq $  10.43 | [c] 2.52  $ \leq $   $ \sigma $ 2  $ \leq $  7.51 | [d] 3.18  $ \leq $   $ \sigma $ 2  $ \leq $  9.21"
+5,"[Question]: 10.  50 samples of an electronic component selected at random at incoming  inspection measures an average resistance of 10 ohms and a standard  deviation of 2 ohms. 95% confidence interval for the population mean is:
+
+[Choices]: [a] 9.53 $ \leq $   $ \mu $  $ \leq $  10.47 | [b] 8 $ \leq $   $ \mu $  $ \leq $  12 | [c] 6 $ \leq $   $ \mu $  $ \leq $ 14  | [d] 9.43 $ \leq $   $ \mu $  $ \leq $  10.57"
+6,"[Question]: 6. A bearing manufacturer has a bearing with Weibull  $ \beta $ =2      and  $ \eta $ =600 hrs. The design team made a small change  in     the design and a change of material. They now hope  they     have doubled the characteristic life at  95% confidence. They tested 10 of the new design bearings for 1800 hrs  and Had 5 failures : 700, 900, 1000, 1100, and 1300 hrs. Did the new  bearing design have 2X the characteristic life With 95% confidence? 
+
+[Choices]: [a] YES  | [b] NO"
+7,"[Question]: 7.  For a certain 3-engine airplane, at least two out of its three engines  must function. The engine reliability at time t is 0.995. Find the  probability that the airplane flies successfully for T hours, assuming  identical and independent engines.
+
+[Choices]: [a] 0.9998 | [b] 0.985 | [c] 0.99945  | [d] 0.999925"
+8,"[Question]: 3. The time to failure of a component is Weibull distributed,  $ \beta $ =0.5,  $ \eta $ =10,000 hours.What is the probability that the component will still be operational after one year? 
+
+[Choices]: [a] 0.3922  | [b] 0.3214 | [c] 0.3680 | [d] 0.6320"
+9,"[Question]: 8.  While the AMSAA-Duane model is N(t)= $ \\lambda $ t $ \\beta $  ; the model can be rearranged  in a number of ways to satisfy a customer\u951f\u65a4\u62f7s demands for reporting. Which  of the following functions could be used for plotting cumulative  Failure rate and Cumulative MTBF:
+I. $ F(t) = \lambda t^{\beta-1} $ 
+II. $ F(t) = \lambda \beta t^{\beta-1} $ 
+III. $ F(t) = (\frac{1}{\lambda}) t^{1-\beta} $ 
+IV. $ F(t) = (\frac{1}{\lambda \beta}) t^{1-\beta} $
+
+[Choices]: [a] I. &amp; II  | [b] I. &amp; III.  | [c] II. &amp; IV. | [d] II. &amp; III."
+10,"[Question]: 10.  A test was done on ultrasonic inspection kits to determine how  effective they are in discovering microscopic cracks in aircraft parts.  When a crack was present, the equipment signaled a crack 98% of the  time. There was a 锟斤拷false alarm锟斤拷 on 3% of the parts which had no cracks.  Suppose five percent of all the parts have a crack in them. If the  percentages in the test can be assumed to be the true probabilities,  find the probability that a part is really bad when a kit signals a  crack.
+
+[Choices]: [a] 0.9215 | B.0.9225.  | [c] 0.6322.  | [d] 0.7533."
+11,"[Question]: 1. A computer chip manufacturer averages 7 defects per chip. What is the probability of a chip containing less than 3 defects? Choose a plausible distribution by yourself by adding least additional assumptions on parameter values.
+
+[Choices]: [a] 0.00638 | [b] 0.02234  | [c] 0.02963  | [d] 0.02872"
+12,"[Question]: 2. Given the following data: (where (-) indicates censored) -309,229,386,-104,180,-217,-167,168,122,138Determine the best fit Weibull parameters  $ \beta $ , $ \eta $ , t0?
+
+[Choices]: [a]  $ \beta $ =2.76, $ \eta $ =261.1, t0= 0.0  | [b]  $ \beta $ =0.88, $ \eta $ =147.86, t0=113.76  | [c]  $ \beta $ =2.61, $ \eta $ =278.2, t0=85. | [d]  $ \beta $ =1.53, $ \eta $ =183, t0= 0.03  ."
+13,"[Question]: 4. Which of the following can be prevented with Preventive maintenance:I. Handling Damage, II. Poor Quality Control, III. Improper installation, IV. Inadequate design
+
+[Choices]: [a] I &amp; III,  | [b] I, II &amp; III  | [c] None of the above | [d] All of the above"
+14,"[Question]: 5.  A supplier of parts claims it has a manufacturing process in which 90%  of parts are defect free. To check this theory, a customer randomly  samples 25 parts and finds seven that are defective. If the supplier锟斤拷s claim is true, what is the probability that 7 or more of the 25 sampled parts are defective? (Assume Binomial)
+
+[Choices]: [a] 0.9977 | [b] 0.9905  | [c] 0.009476  | [d] 0.0022616"
+15,"[Question]: 9. When prioritizing actions to be taken in an FMEA, which of the following priority rankings should be considered first? 
+
+[Choices]: [a] Overall RPN (Risk Priority Number)  | [b] Highest severity ranking  | [c] Highest occurrence ranking"
+16,"[Question]: 3.  Among the various reliability tests that are performed on products at  various stages of development, which of the following tests are most  useful in determining the minimum mean time to failure requirements:1) Reliability growth testing,2) Environmental stress screening,3) Reliability qualification testing,4) Acceptance testing
+
+[Choices]: [a] 1&amp;2, | [b] 2&amp;3,  | [c] 3&amp;4,  | [d] 4&amp;1"
+17,"[Question]: 4.  Five motors are run to failure. Failure times are (in hours):  632,3450,816,928,150. Assuming an exponential distribution, what are the  90% confidence bounds for the MTTF?
+
+[Choices]: [a] 1051, 1942 | [b] 847, 2650 | [c] 347, 3747  | [d] 653, 3034"
+18,"[Question]: 6.  There is a contractual requirement to demonstrate with 90% confidence  that a vehicle can achieve a 100-km mission with a reliability of 99%.  The acceptance test is performed by running 10 vehicles over a 50,000-  km test track. What is the contractual MTTF?
+
+[Choices]: [a] 5000 km  | [b] 9950 km  | [c] 8525 km | [d] 1950"
+19,"[Question]: 7.  The one-month reliability on an indicator lamp is 0.95 with the failure  rate specified as constant. What is the probability that more than two  spare bulbs will be needed during the first year of operation? (Ignore  replacement time.)
+
+[Choices]: [a] 0.1026  | [b] 0.0246  | [c] 0.6155 | [d] 0.127"
+20,"[Question]: 8.  A part for a marine engine with a constant failure rate has an MTTF of  two months. If two spare parts are carried, What is the probability of  surviving a six-month without losing the use of the engine as a result  of part exhaustion?
+
+[Choices]: [a] 0.1026  | [b] 0.0246  | [c] 0.6155 | [d] 0.127"
+21,"[Question]: 10. Find the variance in the time to failure, assuming a constant failure rate  $ \lambda $ , for two units in active parallel.
+
+[Choices]: [a] 2/3 $ \lambda $  | [b] 3/2 $ \lambda $  | [c] 3/4 $ \lambda $ 2  | [d] 5/4  $ \lambda $ 2"
+22,"[Question]: 3.  When testing to establish failure rate and reliability predictions,  which of the following is not normally a feasible acceleration factor  with respect to rated conditions: 
+
+[Choices]: [a] Longer time  | [b] Greater humidity | [c] Higher temperature | [d] Higher voltage"
+23,"[Question]: 5. What is meant by 锟斤拷Fail Safe Design锟斤拷? 
+
+[Choices]: [a] Designed such that a failure will not adversely affect the safe operation of the system   | [b] Designed such that the failure probability is low if the system is operated safely. | [c] Designed such that the system cannot fail if operated safely, | [d] All of the above"
+24,"[Question]: 2. The distribution used to describe the time between failures which occur independently and at a constant rate, is the:
+
+[Choices]: [a] Log normal. | [b] Weibull. | [c] Gamma. | [d] Exponential."

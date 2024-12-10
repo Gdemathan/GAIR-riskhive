@@ -1,0 +1,76 @@
+question_id,question,answer
+1,"[Question]: 2. In general, reliability testing is performed for which of the following reasons?I. To detect unanticipated failure modes.II. To compare estimated failure rates to actual failure rates.III. To monitor reliability growth over time.IV. To meet or exceed customer expectations.
+
+[Choices]: [a] I and III only | [b] II and IV only | [c] I, II and III only  | [d] I, II, III and IV",d
+2,"[Question]: 7. Five items were placed on test, one item failed after 42 hrs, and the remaining four items were removed after 50 hrs. It is known that the time to failure for these items follows a Weibull with  $ \beta $ =2.2. Determine the 95% lower confidence limit for the characteristic life.
+
+[Choices]: [a] 13.5 hrs | [b] 39.8 hrs   | [c] 49.7 hrs.   | [d] None of the above",c
+3,"[Question]: 10.  An engineer just ran 50 compressor start tests with no failures, he  needs to pass the customer锟斤拷s requirement of 80% confidence of 0.90  reliability. Has he done that? 
+
+[Choices]: [a] Yes   | [b] Almost | [c] No way",a
+4,"[Question]: 6. Humans will perform tasks more reliably if:1. They understand what is required and why2. The task is challenging and complex 3. Pressure is applied which penalizes failure 4. There are incentives for quality 
+
+[Choices]: [a] 1 only   | [b] 1 &amp; 2 | [c] 1 &amp; 3 | [d] 1 &amp; 4",a
+5,"[Question]: 7.  Brand X aircraft manufacturing company has a backup control system that  operates independently of the primary control. Each of the systems has a  probability of 0.01 of failing on a particular mission.What is the probability of at least one system functioning properly? 
+
+[Choices]: [a] 0.9999  | [b] 0.9801 | [c] 0.9808 | [d] 0.99999",a
+6,"[Question]: 1. Compared to quality, reliability engineering is more concerned with :I. . Failure rate over time.II. . Manufacturing errors.III. . Defective rate at a point in time.IV. . Product design.
+
+[Choices]: [a] I and II only | [b] II and III only | [c] I, II, III and IV  | [d] I and IV only",d
+7,"[Question]: 7. What is the Best time for Reliability Test Planning?
+
+[Choices]: [a] Production phase,  | [b] Early stage of the product development phase,  | [c] Before the production phase | [d] Field return failure analysis phase",b
+8,"[Question]: 6. The Product Development Maturity Path consists of 5 Phases: Continuously Improve, Launch, Streamline, Stabilize, and Standardize Place them in order:
+
+[Choices]: [a] Continuously Improve, Launch, Streamline, Stabilize, and Standardize | [b] Launch, Streamline, Stabilize, Standardize, and Continuously Improve | [c] Launch, Stabilize, Streamline, Standardize, and Continuously Improve  | [d] Launch, Stabilize, Standardize, Streamline, and Continuously Improve",d
+9,"[Question]: 2. How should a Reliability Engineer react when a corrective action was rejected by management?
+
+[Choices]: [a] Insist the corrective action must be implemented, | [b] Implement corrective action by oneself,  | [c] Agree with management and document the findings,  | [d] Agree with management and discard the findings",c
+10,"[Question]: 9.  In constructing programs for environmental stress screening(ESS), the  selection of the stress levels and the choice of exposure times is a  challenging task. Which of the following are true:I. ESS is not a test. ESS is a screening process II. ESS is not Burn-in, ESS stresses a product to operational extremesIII. ESS is used in manufacturing/production to catch latent failures. IV. All items in a product line should be exposed to ESS.
+
+[Choices]: [a] I., II., IV. | B.I.,III., IV. | [c] II., III., IV.  | [d] I.,II.,III.,&amp; IV.",d
+11,"[Question]: 1. Which of the following is NOT true about the Taguchi DOE approach?I. It includes the concept of loss function in factorial experiments.II. It assumes losses occur when a process fails to meet a target value.III. It assumes losses are due to variability within the process.IV. It assumes that the loss function is a step function relative to the specification limits.
+
+[Choices]: [a] I only | [b] II only | [c] III only  | [d] IV only",d
+12,"[Question]: 7.  Which of the following choices is the best type of control chart for  depicting the average number of defects found in a particular make and  model of a refrigerator?
+
+[Choices]: [a]  X-bar and R-chart | [b]  np chart | [c] A normal curve  | [d] U chart",d
+13,"[Question]: 3.  10 units have entered the field in the last two months with current  times (hours): 25, 33, 40, 45, 50, 60, 64, 75, 80, 99. Failure distribution   $ \beta $ =3.02,  $ \eta $ =88 (hours) What is the expected number of units predicted to fail over the next 5 hours?
+
+[Choices]: [a] 5.44 | [b] 6.44  | [c] 7.44   | [d] 8.44",c
+14,"[Question]: 1. Use the exponential distribution with MTTF=50,000 hrs.. What is the time to 10% failure?
+
+[Choices]: [a] 5000 hrs  | [b] 5268 hrs   | [c] 5450 hrs | [d]  5333 hrs",b
+15,"[Question]: 6.  Suppose that six bad golf balls get mixed up with eight good  golf balls. If two balls are drawn simultaneously, what is the  probability that both are good? 
+
+[Choices]: [a]  0.1563  | [b]  0.3077 | [c]  0.2857 | [d]  0.3956",b
+16,"[Question]: 9.  A product has been produced for many years with an average yield of 85%  (That 85% is a lower 95% confidence limit). Ten batches were produced  using a new raw material with a sample average yield of 86% and a  standard deviation of 1%. At the 95% confidence level, the data indicate  the average yield is: 
+
+[Choices]: [a] less than the sample average yield of 86% and is statistically different  | [b] greater than the sample average yield of 86% and is statistically different | [c] greater than the sample average yield of 86% and statistically there is no difference | [d] less than the sample average yield of 86% and statistically there is no difference",a
+17,"[Question]: 1. The usual consequences of management assuming human error as the 锟斤拷root cause锟斤拷 of a failure is
+
+[Choices]: [a] Repeat of the same failure | [b] Disciplinary action for the employee | [c] Less productivity  | [d] All of the above",d
+18,"[Question]: 2. 锟斤拷Burn-in锟斤拷 testing is conducted on electronic assemblies for systems to:
+
+[Choices]: [a] Establish system failure rate. | [b] Extend product life | [c] Increase the total number of failure occurrences.   | [d] Minimize early life failure occurrences.",d
+19,"[Question]: 9. A failure PDF for Lawn mower engine is assumed to be a Weibull distribution with  $ \beta $ = 4.5 and  $ \eta $  = 9.3 years. What is the design life at a reliability of 90%?
+
+[Choices]: [a] 4.82 yrs   | [b] 5.64 yrs   | [c] 6.66 yrs | [d] 3.35 yrs",b
+20,"[Question]: 4. Seventy-two bearings are available for life testing. To save test time they are divided into six groups of twelve bearings and tested using thesudden-death technique. The Resultant Data is :   Group 1: Bearing #3 fails at 110 hrsGroup 2: Bearing #4 fails at75 hrsGroup 3: Bearing #11 fails at 165 hrsGroup 4: Bearing #5 fails at 310 hrsGroup 5: Bearing #7 fails at 210 hrsGroup 6: Bearing #12 fails at 270 hrs. Assuming that the bearing life follows a Weibull distribution, what is the 0.90 Reliability of the bearing population?
+
+[Choices]: [a] 69 hrs | [b] 79 hrs  | [c] 241 hrs  | [d] 120 hrs",c
+21,"[Question]: 3. You are asked to construct a Zero failure test for a redesigned ball bearing(   $ \beta $ =2.5) that the design folks believe should have an    $ \eta $ =1000hrs.  Program Mgmnt wants you to use only 5 tests. How long  should you test these five samples to be 90% confident that the ball  bearing design is better than 1000hrs? 
+
+[Choices]: [a] 733hrs,   | [b] 851hrs | [c] 975hrs | [d] 1500.hrs",a
+22,"[Question]: 6.  A first prototype for a novel laser-powered sausage slicer is built.  Failures occur at the following numbers of minutes: 1.1, 3.9, 6.2, 17.8,  79.7, 113.1, 206.4 and 239.1. After each failure, the design is refined  to avert further failures from the same mechanism. Determine the  reliability grown coefficient  $ \beta $  for the slicer. 
+
+[Choices]: [a] 0.34  | [b] .93 | [c] 1.31 | [d] 1.15",a
+23,"[Question]: 5.  You are developing a new product. To effectively market this product  the failure rate of your product must be 1/1000 hours or less. In  testing to date, you have experienced failures at 30 hours, 600 hours,  1400 hours and 2500 hours. How much more testing (and fixing) is  required? 
+
+[Choices]: [a] 2000hrs,  | [b] 2500hrs | [c] 4500hrs | [d] 5000hr",a
+24,"[Question]: 1. A system made up of 5 series components has a design  reliability of .96. Subsequently, 4 of the components have reliabilities  apportioned to them of 0.992, 0.991, 0.994, and 0.992. What should the  reliability apportionment for the 5th subsystem be?
+
+[Choices]: [a] 0.970 | [b] 0.969   | [c] 0.990   | [d] 0.992",c
+25,"[Question]: 1. Battery life has been measured as normally distributed with  mean equal to 150 hours and variance of 400 hours. Find the B10 life. 
+
+[Choices]: [a] 124.4 hrs  | [b] 175.6 hrs",a
