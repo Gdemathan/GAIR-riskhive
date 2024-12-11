@@ -26,7 +26,11 @@ I have a doubt. Are you totally sure ? Double-check your answer and explain brie
 """
 
 
-def process_questions(input_file):
+def answer_5_times(input_file: str):
+    """
+    Answers each question with prompt engineering and saves the output to a CSV file.
+    Duplicates the answer 5 times to simulate multiple attempts without burning too many tokens.
+    """
     data = pd.read_csv(input_file)
 
     if "question" not in data.columns:
@@ -79,10 +83,9 @@ def process_questions(input_file):
         for i in range(1, 6):
             output_file.loc[index, f"attempt_{i}"] = answer.final_answer
 
-    # Save to the output file
     os.makedirs("generated", exist_ok=True)
     output_file.to_csv("generated/full_output.csv", index=False)
     print("Predictions saved successfully.")
 
 
-process_questions("test.csv")
+answer_5_times("test.csv")
