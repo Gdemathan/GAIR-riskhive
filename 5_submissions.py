@@ -4,14 +4,13 @@ import os
 from pydantic import BaseModel
 from typing import Literal
 
+import dotenv
+
+dotenv.load_dotenv()
+
 
 class FullReasoning(BaseModel):
     steps: list[str]
-    final_answer: Literal["a", "b", "c", "d"]
-
-
-class DoubleCheckedAnswer(BaseModel):
-    explanation: str
     final_answer: Literal["a", "b", "c", "d"]
 
 
@@ -34,7 +33,14 @@ def process_questions(input_file):
         raise ValueError("The input file must have a 'question' column.")
 
     output_file = pd.DataFrame(
-        columns=["question_id", "attempt_1", "attempt_2", "attempt_3", "attempt_4", "attempt_5"]
+        columns=[
+            "question_id",
+            "attempt_1",
+            "attempt_2",
+            "attempt_3",
+            "attempt_4",
+            "attempt_5",
+        ]
     )
     output_file["question_id"] = data["question_id"]
 
@@ -77,5 +83,6 @@ def process_questions(input_file):
     os.makedirs("generated", exist_ok=True)
     output_file.to_csv("generated/full_output.csv", index=False)
     print("Predictions saved successfully.")
+
 
 process_questions("test.csv")
