@@ -35,7 +35,11 @@ class SubmissionBase:
     def score(self):
         from kaggle_score import get_score
         return get_score(self.get_submission())
-
+    
+    def submission_to_csv(self,fname='submission.csv'):
+        df = self.get_submission()
+        df.to_csv(fname,index=False)
+        return df
 
 
 if __name__=='__main__':
@@ -48,5 +52,5 @@ if __name__=='__main__':
 
     questions = pd.read_csv('test.csv')
     sol = Example1(questions)
-    print(sol.get_submission())
+    print(sol.submission_to_csv())
     sol.score()
