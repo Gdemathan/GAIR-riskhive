@@ -1,3 +1,5 @@
 .venv/
 .env
 generated/
+.vscode
+__pycache__/
