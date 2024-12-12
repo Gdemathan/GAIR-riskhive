@@ -20,7 +20,10 @@ class SubmissionBase:
     
     def _get_submission(self)->pd.DataFrame:        
         def check_answer(a:str,prediction_i,question_i)->str:
-            assert a in ALLOWED_ANSWER, f'The answer given "{a}" is not acceptable, it should be in {ALLOWED_ANSWER}'
+            try:
+                assert a in ALLOWED_ANSWER
+            except:
+                print(f' !! Error Detected : The answer given "{a}" is not acceptable, it should be in {ALLOWED_ANSWER}')
             if self.print_avancement:
                 print(f' --> Prediction {prediction_i}, question {question_i} : {a}')
             return a
@@ -45,15 +48,70 @@ class SubmissionBase:
         return df
 
 
+class SequentialQuestions(SubmissionBase):
+
+    def _ask_questions_in_a_row(self,context:str,questions:list[str])->list[dict[str:str]]:
+        """The goal is to ask several questions in a row to the IA assistant to create a conversation.
+
+        Input:
+            prompt : the initial context for the assistant
+            questions : the list of questions that will be given to the assitant
+
+        Returns:
+            the list of messages in the chat with the assistant        
+        """
+        from openai import OpenAI
+        import os
+        client = OpenAI(
+            api_key=os.environ.get('OPENAI_API_KEY'),  # This is the default and can be omitted
+        )
+
+        messages = [
+            {"role": "system", "content": context},
+        ]
+
+        for q in questions:
+            messages += [{"role": "user", "content": q}]
+
+            chat = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=messages,
+                #temperature=0.61,
+                #max_completion_tokens=50,
+            )
+            r = chat.choices[0].message.content
+
+            messages += [{"role": "assistant", "content": r}]
+        
+        messages = [{i['role']:i['content']} for i in messages]
+        return messages
+
+
+
 if __name__=='__main__':
-    class Example1(SubmissionBase):
-        def get_1_answer(self,q):
-            """In this example, the model gives always b.
-            For futures improvements of our prompt engineering skills, we only have this function to define.
-            """
-            return 'b'
 
     questions = pd.read_csv('test.csv')
-    sol = Example1(questions)
-    print(sol.submission_to_csv())
-    sol.score()
+
+    if False:
+        class Example1(SubmissionBase):
+            def get_1_answer(self,q):
+                """In this example, the model gives always b.
+                For futures improvements of our prompt engineering skills, we only have this function to define.
+                """
+                return 'b'
+
+        
+        sol = Example1(questions)
+        print(sol.submission_to_csv())
+        sol.score()
+    
+    if True:
+        ai = SequentialQuestions(questions)
+        r = ai._ask_questions_in_a_row(
+            context='Hello World',
+            questions=[
+                'Quelle est la capitale de la France ?',
+                'Combien y-a-t\'il d\'habitants dans cette ville ?'
+            ]
+        )
+        [print(i) for i in r]
