@@ -55,7 +55,7 @@ class SequentialQuestions(SubmissionBase):
         The log should then be the list of messages ('autor','message')"""
         raise NotImplementedError('The function should be implemented specifically in a subclass')
 
-    def _ask_questions_in_a_row(self,context:str,questions:list[str])->list[dict[str:str]]:
+    def _ask_questions_in_a_row(self,context:str,questions:list)->list:
         """The goal is to ask several questions in a row to the IA assistant to create a conversation.
 
         Input:
