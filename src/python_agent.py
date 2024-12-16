@@ -86,7 +86,7 @@ RETRY_PROMPT = """I'm sorry, but your script did not return shit. Please make a 
 
 
 def craft_error_prompt(message: str):
-    return f"""Please make code that works, your script just crashed mate. Here is the error: {message}"""
+    return f"""Please make code that works, your script just crashed mate. Here is the error: {message}. Fix it in the script"""
 
 
 def craft_result_message(result: str):
@@ -217,7 +217,7 @@ class PythonAgent:
                     + [
                         {
                             "role": "assistant",
-                            "content": "It appears my script crashed.",
+                            "content": f"Script executed: \n{script}",
                         },
                         {"role": "user", "content": craft_error_prompt(str(e))},
                     ],
