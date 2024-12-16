@@ -29,7 +29,6 @@ def execute_python_script(script: str) -> str:
 
     with open("sandbox_script.py", "w") as file:
         file.write(script)
-        print(f"Script written to sandbox_script.py: \n{script}")
 
     try:
         result = subprocess.run(
@@ -154,12 +153,14 @@ class PythonAgent:
         user: str = None,
         **kwargs,
     ):
+        messages_copy = messages.copy()
         if self._num_retries >= self._max_retries:
-            save_json(messages, self._messages_log_path)
+            save_json(messages_copy, self._messages_log_path)
             self._reset_internals()
             raise ToolError("Max retries reached. Returning no output.")
 
         if self._override_args:
+            messages_copy = self._append_tool_prompt_to_system(messages_copy)
             self._api_params = {
                 "model": "gpt-4o-mini",
                 "temperature": temperature,
@@ -176,11 +177,11 @@ class PythonAgent:
                 **kwargs,
             }
 
-        answer = self._ask_llm(messages)
+        answer = self._ask_llm(messages_copy)
 
         if answer.choices[0].finish_reason != "tool_calls":
             self._num_retries = 0
-            all_messages = messages + [
+            all_messages = messages_copy + [
                 {"role": "assistant", "content": answer.choices[0].message.content}
             ]
             save_json(all_messages, self._messages_log_path)
@@ -198,7 +199,7 @@ class PythonAgent:
                 logger.error(f"An error occurred: {e}. Scolding model and retrying...")
                 self._num_retries += 1
                 return self.ask_with_python(
-                    messages=messages
+                    messages=messages_copy
                     + [
                         {
                             "role": "assistant",
@@ -219,7 +220,7 @@ class PythonAgent:
                 logger.info("The script returned no output. Trying again")
                 self._num_retries += 1
                 return self.ask_with_python(
-                    messages=messages
+                    messages=messages_copy
                     + [
                         {
                             "role": "assistant",
@@ -234,7 +235,7 @@ class PythonAgent:
             logger.info(f"Prompting with the result: {result}")
             self._num_retries += 1
             return self.ask_with_python(
-                messages=messages
+                messages=messages_copy
                 + [
                     {
                         "role": "assistant",
