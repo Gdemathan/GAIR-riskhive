@@ -2,8 +2,11 @@ import subprocess
 import os
 from openai import OpenAI
 import dotenv
-from utils import logger, save_json
 import json
+if __name__ == "__main__": # this is a bit shit, it is for file testing purpose
+    from utils import logger, save_json
+else:
+    from src.utils import logger, save_json
 
 dotenv.load_dotenv()
 
@@ -49,7 +52,6 @@ def execute_python_script(script: str) -> str:
         return None
 
     return result.stdout.strip()
-
 
 
 tool_dict = {
@@ -103,24 +105,42 @@ class ToolError(Exception):
 
 class PythonAgent:
     def __init__(
-        self, client: OpenAI, max_retries: int = 3, tool_prompt: str = DEFAULT_TOOL_PROMPT
+        self,
+        client: OpenAI,
+        max_retries: int = 3,
+        tool_prompt: str = DEFAULT_TOOL_PROMPT,
+        messages_log_path: str = "generated/messages.json",
     ):
         self.client = client
-        self.num_retries = 0
+        self._num_retries = 0
         self.retry_prompt = RETRY_PROMPT
         self.tool_prompt = tool_prompt
-        self.max_retries = max_retries
+        self._max_retries = max_retries
+        self._api_params = {}
+        self._override_args = True
+        self._messages_log_path = messages_log_path
+
+    def _reset_internals(self):
+        self._override_args = True
+        self._num_retries = 0
+        self._api_params = {}
 
     def _append_tool_prompt_to_system(self, messages: list[dict]) -> list[dict]:
         def append_prompt(message):
             if message["role"] == "system":
                 return {
                     **message,
-                    "content": f"{message.get('content', '')} \n {self.tool_prompt}",
+                    "content": f"{message.get('content', '')}\n{self.tool_prompt}",
                 }
             return message
 
         return list(map(append_prompt, messages))
+
+    def _ask_llm(self, messages: list[dict]):
+        appended_messages = self._append_tool_prompt_to_system(messages)
+        return self.client.chat.completions.create(
+            messages=appended_messages, **self._api_params
+        )
 
     def ask_with_python(
         self,
@@ -137,36 +157,38 @@ class PythonAgent:
         user: str = None,
         **kwargs,
     ):
-        """
-        A custom implementation of the completions.create method.
-        This wrapper prompts the system to use python if it needs to.
-        """
-        if self.num_retries >= self.max_retries:
-            save_json(messages, "generated/messages.json")
+        if self._num_retries >= self._max_retries:
+            save_json(messages, self._messages_log_path)
+            self._reset_internals()
             raise ToolError("Max retries reached. Returning no output.")
-        answer = self.client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=self._append_tool_prompt_to_system(messages),
-            temperature=temperature,
-            top_p=top_p,
-            n=n,
-            stream=stream,
-            stop=stop,
-            max_tokens=max_tokens,
-            presence_penalty=presence_penalty,
-            frequency_penalty=frequency_penalty,
-            logit_bias=logit_bias,
-            user=user,
-            tools=[tool_dict],
-            **kwargs,
-        )
+
+        if self._override_args:
+            self._api_params = {
+                "model": "gpt-4o-mini",
+                "temperature": temperature,
+                "top_p": top_p,
+                "n": n,
+                "stream": stream,
+                "stop": stop,
+                "max_tokens": max_tokens,
+                "presence_penalty": presence_penalty,
+                "frequency_penalty": frequency_penalty,
+                "logit_bias": logit_bias,
+                "user": user,
+                "tools": [tool_dict],
+                **kwargs,
+            }
+
+        answer = self._ask_llm(messages)
+
         if answer.choices[0].finish_reason != "tool_calls":
-            self.num_retries = 0
+            self._num_retries = 0
             all_messages = messages + [
-                {"role": "assistant", "content": answer.choices[0].message.content},
+                {"role": "assistant", "content": answer.choices[0].message.content}
             ]
-            save_json(all_messages, "messages.json")
+            save_json(all_messages, self._messages_log_path)
             return answer
+
         tool_call = answer.choices[0].message.tool_calls[0]
         if tool_call.function.name == "execute_python_script":
             logger.info("Found a python script to execute.")
@@ -177,7 +199,7 @@ class PythonAgent:
                 result = execute_python_script(script)
             except PythonError as e:
                 logger.error(f"An error occurred: {e}. Scolding model and retrying...")
-                self.num_retries += 1
+                self._num_retries += 1
                 return self.ask_with_python(
                     messages=messages
                     + [
@@ -187,27 +209,18 @@ class PythonAgent:
                         },
                         {"role": "user", "content": craft_error_prompt(str(e))},
                     ],
-                    temperature=temperature,
-                    top_p=top_p,
-                    n=n,
-                    stream=stream,
-                    stop=stop,
-                    max_tokens=max_tokens,
-                    presence_penalty=presence_penalty,
-                    frequency_penalty=frequency_penalty,
-                    logit_bias=logit_bias,
-                    user=user,
-                    **kwargs,
+                    **self._api_params,
                 )
             except Exception as e:
                 logger.error("An unexpected error occurred: ", e)
                 raise ToolError("An unexpected error occurred.")
+
             if result is None:
-                if self.num_retries >= self.max_retries:
+                if self._num_retries >= self._max_retries:
                     logger.info("Max retries reached. Returning no output.")
                     raise ToolError("Max retries reached. Returning no output.")
                 logger.info("The script returned no output. Trying again")
-                self.num_retries += 1
+                self._num_retries += 1
                 return self.ask_with_python(
                     messages=messages
                     + [
@@ -217,21 +230,12 @@ class PythonAgent:
                         },
                         {"role": "user", "content": self.retry_prompt},
                     ],
-                    temperature=temperature,
-                    top_p=top_p,
-                    n=n,
-                    stream=stream,
-                    stop=stop,
-                    max_tokens=max_tokens,
-                    presence_penalty=presence_penalty,
-                    frequency_penalty=frequency_penalty,
-                    logit_bias=logit_bias,
-                    user=user,
-                    **kwargs,
+                    **self._api_params,
                 )
+
             logger.info("Script executed successfully.")
             logger.info(f"Prompting with the result: {result}")
-            self.num_retries += 1
+            self._num_retries += 1
             return self.ask_with_python(
                 messages=messages
                 + [
@@ -241,27 +245,29 @@ class PythonAgent:
                     },
                     {"role": "user", "content": craft_result_message(result)},
                 ],
-                temperature=temperature,
-                top_p=top_p,
-                n=n,
-                stream=stream,
-                stop=stop,
-                max_tokens=max_tokens,
-                presence_penalty=presence_penalty,
-                frequency_penalty=frequency_penalty,
-                logit_bias=logit_bias,
-                user=user,
-                **kwargs,
+                **self._api_params,
             )
-            
 
 
 if __name__ == "__main__":
-    agent = PythonAgent(client)
-    answer = agent.ask_with_python(
+    success_agent = PythonAgent(client)
+    answer = success_agent.ask_with_python(
         [
             {"role": "system", "content": "Hello!"},
             {"role": "user", "content": USER_PROMPT},
         ]
     )
-    print("answer: ", answer.choices[0].message.content)
+    empty_agent = PythonAgent(client, messages_log_path="generated/empty_messages.json")
+    answer = empty_agent.ask_with_python(
+        [
+            {"role": "system", "content": "Hello!"},
+            {"role": "user", "content": USER_EMPTY_PROMPT},
+        ]
+    )
+    bug_agent = PythonAgent(client, messages_log_path="generated/bug_messages.json")
+    answer = bug_agent.ask_with_python(
+        [
+            {"role": "system", "content": "Hello!"},
+            {"role": "user", "content": USER_BUGGED_PROMPT},
+        ]
+    )

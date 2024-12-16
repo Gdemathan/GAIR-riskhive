@@ -3,6 +3,15 @@ import logging
 
 
 class Logger:
+    """
+    Logger class. It is used to log information and errors.
+    This class is used to keep track of the useful logs. When debugging, one can type "print".
+    The logs printed by the logger are useful data that can be used to understand the behavior of the program,
+    and ought to be kept.
+
+    Args:
+        log_file (str): The path to the log file. If None, the logs will not be saved to a file.
+    """
     logger = logging.getLogger("masterclass")
 
     def __init__(self, log_file: str = None):
