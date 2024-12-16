@@ -100,6 +100,17 @@ class ToolError(Exception):
 
 
 class PythonAgent:
+    """
+    A class that gives access to python script execution.
+    It injects instructions in the system prompt, while giving access to the tool.
+    It handle all 3 cases: 
+    - success
+    - the created script crashes
+        -> will prompt to re-write the script, with the error
+    - the created script returns None
+        -> will prompt to return something
+
+    """
     def __init__(
         self,
         client: OpenAI,
@@ -153,6 +164,9 @@ class PythonAgent:
         user: str = None,
         **kwargs,
     ):
+        """
+        Ask a question and execute python script if needed. Params are the same as the OpenAI API.
+        """
         messages_copy = messages.copy()
         if self._num_retries >= self._max_retries:
             save_json(messages_copy, self._messages_log_path)
