@@ -1,16 +1,13 @@
 import subprocess
 import os
 from openai import OpenAI
-import dotenv
 import json
-if __name__ == "__main__": # this is a bit shit, it is for file testing purpose
+
+if __name__ == "__main__":  # for local file testing purposes
     from utils import logger, save_json
+    from client import openai_client
 else:
     from src.utils import logger, save_json
-
-dotenv.load_dotenv()
-
-client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 
 class PythonError(Exception):
@@ -250,21 +247,25 @@ class PythonAgent:
 
 
 if __name__ == "__main__":
-    success_agent = PythonAgent(client)
+    success_agent = PythonAgent(openai_client)
     answer = success_agent.ask_with_python(
         [
             {"role": "system", "content": "Hello!"},
             {"role": "user", "content": USER_PROMPT},
         ]
     )
-    empty_agent = PythonAgent(client, messages_log_path="generated/empty_messages.json")
+    empty_agent = PythonAgent(
+        openai_client, messages_log_path="generated/empty_messages.json"
+    )
     answer = empty_agent.ask_with_python(
         [
             {"role": "system", "content": "Hello!"},
             {"role": "user", "content": USER_EMPTY_PROMPT},
         ]
     )
-    bug_agent = PythonAgent(client, messages_log_path="generated/bug_messages.json")
+    bug_agent = PythonAgent(
+        openai_client, messages_log_path="generated/bug_messages.json"
+    )
     answer = bug_agent.ask_with_python(
         [
             {"role": "system", "content": "Hello!"},
