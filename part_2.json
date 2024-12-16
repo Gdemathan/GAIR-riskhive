@@ -1,0 +1,47 @@
+[
+    {
+      "theme": "Reliability Engineering",
+      "information": "Application of engineering principles to design products that meet specific reliability requirements, quantifying the probability of performing intended functions over a specified mission profile."
+    },
+    {
+      "theme": "System Safety",
+      "information": "Application of engineering and management principles to optimize safety and reduce risks within operational effectiveness, time, and cost constraints throughout all system life cycle phases."
+    },
+    {
+      "theme": "Risk Assessment",
+      "information": "Process of determining the magnitude and consequences of risk, defined as the uncertainty regarding future outcomes, encompassing safety, technical performance, cost, and schedule."
+    },
+    {
+      "theme": "Risk Management",
+      "information": "Systematic and iterative optimization of project resources according to a risk management policy, involving identification, assessment, mitigation, and monitoring of risks."
+    },
+    {
+      "theme": "Risk-Informed Decision Making (RIDM)",
+      "information": "Process of identifying decision alternatives, analyzing associated risks, and selecting an alternative informed by risk analysis results to develop credible performance requirements."
+    },
+    {
+      "theme": "Continuous Risk Management (CRM)",
+      "information": "Managing risk associated with implementing baseline performance requirements through identification, analysis, planning, tracking, and control of risk contributors."
+    },
+    {
+      "theme": "Probability in Risk Assessment",
+      "information": "Quantification of the likelihood of an event, ranging between 0 and 1, interpreted as relative frequency over numerous repetitions or as a 'degree of belief' in Bayesian statistics."
+    },
+    {
+      "theme": "Risk Matrix",
+      "information": "Communication tool assessing risk by evaluating the relationship between severity and probability for a given hazard, aiding in prioritizing risks and guiding mitigation efforts."
+    },
+    {
+      "theme": "Probabilistic Risk Assessment (PRA)",
+      "information": "Systematic analysis to determine potential failure scenarios, their likelihood, and consequences, providing a framework to prioritize risks and quantify cumulative risk and uncertainties."
+    },
+    {
+      "theme": "Fault Tree Analysis (FTA)",
+      "information": "Top-down symbolic logic model tracing failure pathways from an undesired system state to potential causal faults, identifying minimal cut sets leading to the top event."
+    },
+    {
+      "theme": "Event Sequence Diagram (ESD)",
+      "information": "Flow chart depicting paths leading to different end states from an initiating event, with each path representing a scenario, supporting probabilistic risk assessments."
+    }
+  ]
+  
