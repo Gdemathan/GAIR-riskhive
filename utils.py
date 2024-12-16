@@ -1,4 +1,36 @@
 import json
+import logging
+
+
+class Logger:
+    logger = logging.getLogger("masterclass")
+
+    def __init__(self, log_file: str = None):
+        self.log_file = log_file
+        if self.log_file is not None:
+            with open(self.log_file, "w") as f:
+                f.write("logger initialized\n")
+        logging.basicConfig(
+            filename=self.log_file,
+            level=logging.INFO,
+            format="[INFO]: %(asctime)s - %(message)s",
+            datefmt="%Y-%m-%d %H:%M:%S",
+        )
+
+    def info(self, *args):
+        if self.log_file:
+            print(*args)
+        string_args = " ".join(map(str, args))
+        self.logger.info(string_args)
+
+    def error(self, *args):
+        if self.log_file:
+            print(*args)
+        string_args = " ".join(map(str, args))
+        self.logger.error(string_args)
+
+
+logger = Logger()
 
 
 def save_json(list_or_dict,fname:str)->None:
