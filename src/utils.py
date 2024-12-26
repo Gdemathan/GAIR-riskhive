@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 
 
 class Logger:
@@ -43,6 +44,10 @@ logger = Logger()
 
 
 def save_json(list_or_dict,fname:str)->None:
+    
+    if len(os.path.dirname(fname))>0:
+        os.makedirs(os.path.dirname(fname), exist_ok=True)
+
     with open(fname, "w", encoding="utf-8") as fichier:
         json.dump(list_or_dict, fichier, ensure_ascii=False, indent=4)
     
