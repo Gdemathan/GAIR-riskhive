@@ -94,57 +94,6 @@ class SubmissionBase(ABC):
         return submission
 
 
-class SequentialQuestions(SubmissionBase):
-    def get_1_answer(self, q: str, return_log=False) -> str:
-        """This function should be implemented for all tries of prompt engineering.
-        The log should then be the list of messages ('autor','message')"""
-        raise NotImplementedError(
-            "The function should be implemented specifically in a subclass"
-        )
-
-    def _ask_questions_in_a_row(self, context: str, questions: list) -> list:
-        """The goal is to ask several questions in a row to the IA assistant to create a conversation.
-
-        Input:
-            prompt : the initial context for the assistant
-            questions : the list of questions that will be given to the assitant
-
-        Returns:
-            the list of messages in the chat with the assistant
-        """
-
-        messages = [
-            {"role": "system", "content": context},
-        ]
-
-        for q in questions:
-            messages += [{"role": "user", "content": q}]
-
-            chat = self.openai_client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=messages,
-            )
-            r = chat.choices[0].message.content
-
-            messages += [{"role": "assistant", "content": r}]
-        messages = [(f"{i}-" + m["role"], m["content"]) for i, m in enumerate(messages)]
-        return messages
-
-    def test(self, n=None) -> pd.DataFrame:
-        df = pd.read_csv("data/train.csv")
-        if isinstance(n, int):
-            df = df[:n]
-
-        def get_answer(row):
-            logs = self.get_1_answer(row["question"], return_log=True)
-            return pd.Series({k: v for k, v in logs})
-
-        df_logs = df.apply(lambda row: get_answer(row), axis=1)
-        df_logs = pd.DataFrame.from_dict(df_logs)
-        df = pd.concat([df, df_logs], axis=1)
-        return df
-
-
 def test_submission(
     submitter: SubmissionBase, fake_multiple_attempts: bool = False
 ) -> float:
@@ -167,18 +116,3 @@ def test_submission(
     logger.info("--------------------")
 
     return score
-
-
-if __name__ == "__main__":
-    questions = pd.read_csv("data/test.csv")
-
-    ai = SequentialQuestions(questions)
-    ai.print_advancement = False
-    r = ai._ask_questions_in_a_row(
-        context="Hello World",
-        questions=[
-            "Quelle est la capitale de la France ?",
-            "Combien y-a-t'il d'habitants dans cette ville ?",
-        ],
-    )
-    [print(i) for i in r]
