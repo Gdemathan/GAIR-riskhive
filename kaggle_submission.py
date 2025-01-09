@@ -25,7 +25,6 @@ class SubmissionBase(ABC):
     questions_df: pd.DataFrame
     openai_client: OpenAI
     print_advancement = True
-    _submission: pd.DataFrame = None
 
     @abstractmethod
     def get_1_answer(self, q: str) -> str:
@@ -71,9 +70,9 @@ class SubmissionBase(ABC):
         df = self.questions_df.copy()
         for i in range(1, 6):
             if i != 1 and fake_multiple_attempts:
-                df[f"predition_{i}"] = df["predition_1"]
+                df[f"prediction_{i}"] = df["prediction_1"]
                 continue
-            df[f"predition_{i}"] = df.apply(
+            df[f"prediction_{i}"] = df.apply(
                 lambda row: check_answer(
                     self.get_1_answer(row["question"]), i, row["question_id"]
                 ),
@@ -86,13 +85,10 @@ class SubmissionBase(ABC):
         save_path: str | None = "generated/submission.csv",
         fake_multiple_attempts=False,
     ) -> pd.DataFrame:
-        if self._submission is None:
-            self._submission = self._get_submission(
-                fake_multiple_attempts=fake_multiple_attempts
-            )
-            if save_path:
-                self._submission.to_csv(save_path, index=False)
-        return self._submission
+        submission = self._get_submission(fake_multiple_attempts=fake_multiple_attempts)
+        if save_path:
+            submission.to_csv(save_path, index=False)
+        return submission
 
 
 class SequentialQuestions(SubmissionBase):
@@ -144,6 +140,30 @@ class SequentialQuestions(SubmissionBase):
         df_logs = pd.DataFrame.from_dict(df_logs)
         df = pd.concat([df, df_logs], axis=1)
         return df
+
+
+def test_submission(
+    submitter: SubmissionBase, fake_multiple_attempts: bool = False
+) -> float:
+    initial_questions_df = submitter.questions_df.copy()
+    submitter.questions_df = pd.read_csv("data/train.csv")
+    answer_df = submitter.get_submission(
+        fake_multiple_attempts=fake_multiple_attempts, save_path=None
+    )
+    score = answer_df.apply(
+        lambda row: sum(
+            [1 if row[f"prediction_{i}"] == row["answer"] else 0 for i in range(1, 6)]
+        )
+        / 5,
+        axis=1,
+    ).mean()
+    submitter.questions_df = initial_questions_df
+
+    logger.info("--------------------")
+    logger.info(f"Score : {score} for model {submitter.__class__.__name__}")
+    logger.info("--------------------")
+
+    return score
 
 
 if __name__ == "__main__":
