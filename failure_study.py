@@ -1,3 +1,8 @@
+"""
+This file was used solely for the purpose of testing the system, for the corresponding assignment.
+It is not used in the final product.
+"""
+
 from openai import OpenAI
 import pandas as pd
 import os

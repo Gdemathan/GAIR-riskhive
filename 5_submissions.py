@@ -4,10 +4,6 @@ from pydantic import BaseModel
 from typing import Literal
 from src.client import openai_client
 
-import dotenv
-
-dotenv.load_dotenv()
-
 
 class FullReasoning(BaseModel):
     steps: list[str]
