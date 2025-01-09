@@ -10,6 +10,11 @@ if __name__ != "__main__":
 
 DEFAULT_TOOL_PROMPT = """You can use python whenever you need to perform complex calculations or operations.
  When needed write a python script that prints only the final result.
+ You have access to the following libraries : 
+    - numpy
+    - pandas
+    - scikit-learn
+    - reliability
  Example: 
  
  list = [4,1,2]
@@ -65,7 +70,7 @@ class PythonAgent:
     def __init__(
         self,
         client: OpenAI,
-        max_retries: int = 3,
+        max_retries: int = 5,
         tool_prompt: str = DEFAULT_TOOL_PROMPT,
         messages_log_path: str = "generated/messages.json",
     ):
@@ -104,19 +109,33 @@ class PythonAgent:
             messages=appended_messages, **self._api_params
         )
 
+    def safe_ask_with_python(
+        self,
+        messages: list,
+        **kwargs,
+    ):
+        """
+        Ask a question and execute python script if needed. Params are the same as the OpenAI API.
+        """
+
+        try:
+            return self.ask_with_python(messages, **kwargs)
+        except ToolError as e:
+            logger.error(f"An error occurred: {e}")
+            return self.client._default_ask_llm(
+                messages=messages
+                + [
+                    {
+                        "role": "user",
+                        "content": "Answer the question without using Python",
+                    },
+                ],
+                **kwargs,
+            )
+
     def ask_with_python(
         self,
         messages: list,
-        temperature: float = None,
-        top_p: float = None,
-        n: int = 1,
-        stream: bool = False,
-        stop: str = None,
-        max_tokens: int = None,
-        presence_penalty: float = None,
-        frequency_penalty: float = None,
-        logit_bias: dict = None,
-        user: str = None,
         **kwargs,
     ):
         """
@@ -132,16 +151,6 @@ class PythonAgent:
             self._messages = self._append_tool_prompt_to_system(self._messages)
             self._api_params = {
                 "model": "gpt-4o-mini",
-                "temperature": temperature,
-                "top_p": top_p,
-                "n": n,
-                "stream": stream,
-                "stop": stop,
-                "max_tokens": max_tokens,
-                "presence_penalty": presence_penalty,
-                "frequency_penalty": frequency_penalty,
-                "logit_bias": logit_bias,
-                "user": user,
                 "tools": [PYTHON_TOOL_DICT],
                 **kwargs,
             }
@@ -163,7 +172,9 @@ class PythonAgent:
             arguments = json.loads(tool_call.function.arguments)
             script = add_print_to_script(arguments["script"])
             try:
-                logger.info(f"Executing the following script: \n\n{script}\n```")
+                logger.info(
+                    f"Executing the following script: \n\n```python\n{script}\n```"
+                )
                 self._messages.append(
                     {
                         "role": "assistant",
@@ -243,7 +254,7 @@ class PythonAgent:
             tool_prompt=tool_prompt,
         )
         openai_client.is_python_agent_injected = True
-        openai_client.chat.completions.create = agent.ask_with_python
+        openai_client.chat.completions.create = agent.safe_ask_with_python
         return openai_client
 
 
