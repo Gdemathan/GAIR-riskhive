@@ -1,0 +1,133 @@
+{
+  "RAG": [
+    {
+      "Population": "The complete set of all possible observations or individuals of interest in a particular study."
+    },
+    {
+      "Sample": "A subset of the population, selected to represent the population in a study."
+    },
+    {
+      "Parameter": "A numerical characteristic or measure that describes a feature of a population."
+    },
+    {
+      "Statistic": "A numerical characteristic or measure calculated from a sample. It is used to estimate the corresponding population parameter."
+    },
+    {
+      "Parametric Methods": "Statistical methods that assume the data follows a specific distribution (e.g., normal distribution) and rely on known parameters."
+    },
+    {
+      "Nonparametric Methods": "Statistical methods that do not assume any specific distribution for the data. These methods are more flexible and are used when the assumptions of parametric methods are not met."
+    },
+    {
+      "Mean": "The average value of a data set. This can be calculated by summing up all of the individual values in the data set and dividing the total by the number of data values (n) in the set. The formula is: \\( \\mu = \\frac{1}{n} \\sum_{i=1}^{n} x_i \\), where x_i are the individual values."
+    },
+    {
+      "Median": "The middle value in a sorted (i.e. low to high) data set. If there is an even number of values, then it is the average of the two middle values. If n is odd, the formula is: \\( \\text{Median} = x_{(n+1)/2} \\), where n is the number of data points."
+    },
+    {
+      "Range": "The difference between the highest and lowest values of a data set. \\( \\text{Range} = x_{\\text{max}} - x_{\\text{min}} \\), where \\( x_{\\text{max}} \\) is the highest value and \\( x_{\\text{min}} \\) is the lowest value."
+    },
+    {
+      "Variation": "A measure of how widely data values are spread out from the center of a data set. This can be calculated as the variance."
+    },
+    {
+      "Variance": "A measure of how far the values in a data set are from the mean, on average. The formula for population variance is: \\( \\sigma^2 = \\frac{1}{N} \\sum_{i=1}^{N} (x_i - \\mu)^2 \\), and for sample variance: \\( s^2 = \\frac{1}{n-1} \\sum_{i=1}^{n} (x_i - \\bar{x})^2 \\), where \\( N \\) is the population size, \\( n \\) is the sample size, \\( \\mu \\) is the population mean, and \\( \\bar{x} \\) is the sample mean."
+    },
+    {
+      "Standard Deviation": "A measure of how far data values are spread around the mean of a data set. It is computed as the square root of the variance. The formula for population standard deviation is: \\( \\sigma = \\sqrt{ \\frac{1}{N} \\sum_{i=1}^{N} (x_i - \\mu)^2 } \\), and for sample standard deviation: \\( s = \\sqrt{ \\frac{1}{n-1} \\sum_{i=1}^{n} (x_i - \\bar{x})^2 } \\)."
+    },  
+    {
+      "Samples": "The sampling table gives the number of possible samples of size k out of a population of size n, under various assumptions about how the sample is collected. When sampling with replacement, each individual or item is returned to the population after being selected. The number of possible samples is given by the formula for combinations with replacement, which is represented as the binomial coefficient: \\( \\binom{n+k-1}{k} = \\frac{(n+k-1)!}{k!(n-1)!} \\) where n is the population size, and k is the sample size. When sampling without replacement, once an individual or item is selected, it is not returned to the population. The number of possible samples is given by the binomial coefficient for combinations without replacement: \\( \\binom{n}{k} = \\frac{n!}{k!(n-k)!} \\) where n is the population size, and k is the sample size."
+    },
+    {
+      "Central Limit Theorem": "The Central Limit Theorem (CLT) is one of the most important results in mathematics. Consider X1, ..., Xn as a sequence of independent and identically distributed random variables with mean μ and standard deviation σ. Then, √n/σ * ((1/n) ∑(Xi - μ)) converges in distribution to N(0, 1) as n approaches infinity. This theorem asserts that the empirical mean of a large number of observations always converges to the Normal distribution, regardless of the nature of the phenomenon being studied."
+    },
+    {
+      "independence": "Independent Events A and B are independent if knowing whether A occurred gives no information about whether B occurred. More formally, A and B (which have nonzero probability) are independent if and only if one of the following equivalent statements holds: P(A ∩ B) = P(A)P(B), P(A|B) = P(A), P(B|A) = P(B)."
+    },
+    {
+      "conditional_independence": "A and B are conditionally independent given C if: P(A ∩ B|C) = P(A|C)P(B|C). Conditional independence does not imply independence, and independence does not imply conditional independence."
+    },
+    {
+      "unions_intersections_complements": "De Morgan’s Laws: A useful identity that can make calculating probabilities of unions easier by relating them to intersections, and vice versa. (A ∪ B)c = Ac ∩ Bc, (A ∩ B)c = Ac ∪ Bc."
+    },
+    {
+      "joint_marginal_conditional": "Joint Probability: P(A ∩ B) or P(A, B) – Probability of A and B. Marginal (Unconditional) Probability: P(A) – Probability of A. Conditional Probability: P(A|B) = P(A, B)/P(B) – Probability of A, given that B occurred."
+    },
+    {
+      "intersection_union_probabilities": "Intersections via Conditioning: P(A, B) = P(A)P(B|A), P(A, B, C) = P(A)P(B|A)P(C|A, B). Unions via Inclusion-Exclusion: P(A ∪ B) = P(A) + P(B) − P(A ∩ B), P(A ∪ B ∪ C) = P(A) + P(B) + P(C) − P(A ∩ B) − P(A ∩ C) − P(B ∩ C) + P(A ∩ B ∩ C)."
+    },
+    {
+      "law_of_total_probability": "Let B1, B2, B3, ...Bn be a partition of the sample space (i.e., they are disjoint and their union is the entire sample space). P(A) = P(A|B1)P(B1) + P(A|B2)P(B2) + · · · + P(A|Bn)P(Bn), P(A) = P(A ∩ B1) + P(A ∩ B2) + · · · + P(A ∩ Bn)."
+    },
+    {
+      "bayes_rule": "Bayes’ Rule: P(A|B) = P(B|A)P(A)/P(B). P(A|B, C) = P(B|A, C)P(A|C)/P(B|C). We can also write P(A|B, C) = P(A, B, C)/P(B, C) = P(B, C|A)P(A)/P(B, C)."
+    },
+    {
+      "ProbabilityMassFunction": "Gives the probability that a discrete random variable takes on the value x. p_X(x) = P(X = x). The PMF satisfies p_X(x) ≥ 0 and ∑ p_X(x) = 1."
+    },
+    {
+      "CumulativeDistributionFunction": "Gives the probability that a random variable is less than or equal to x. F_X(x) = P(X ≤ x)."
+    },
+    {
+      "ProbabilityDensityFunction": "The PDF is the derivative of the CDF. F'(x) = f(x). If you integrate it over an interval [a,b], it gives the probability that a random variable takes on a value in this interval [a,b]. A PDF is nonnegative and integrates to 1. To get from PDF to CDF, integrate f to get F."
+    },
+    {
+      "Reliability": "It is the probability that the item survives the time interval (0, t] and is still functioning at time t. R(t) = 1 - F(t) = P(T > t). It is also called the reliability function."
+    },
+    {
+      "reliability of system": "To compute the reliability of a system with components in series, multiply the reliability of each component: R_system = R1 × R2 × ... × Rn. In a series configuration, failure of any component causes system failure. For components in parallel, calculate the complement of the product of their unreliabilities: R_system = 1 - [(1 - R1) × (1 - R2) × ... × (1 - Rn)]. In parallel systems, the system fails only if all components fail simultaneously."
+    },    
+    {
+      "FailureRateFunction": "The probability that an item will fail in the time interval (t, t + Δt] when we know that the item is functioning at time t is z(t) = f(t) / R(t). It corresponds to the number of failures per unit of time."
+    },
+    {
+      "binomial": "The probability density function is f(t) = \\binom{n}{t} p^t (1-p)^{n-t}. The distribution function is F(t) = \\sum_{k=0}^t \\binom{n}{k} p^k (1-p)^{n-k}. The survivor function is R(t) = \\sum_{k=t+1}^n \\binom{n}{k} p^k (1-p)^{n-k}. The failure rate function is z(t) = \\frac{\\binom{n}{t} p^t (1-p)^{n-t}}{\\sum_{k=t+1}^n \\binom{n}{k} p^k (1-p)^{n-k}}. The mean time to failure is MTTF = \\sum_{t=0}^n t \\binom{n}{t} p^t (1-p)^{n-t}. The conditional survivor function is R(t | t_0) = \\frac{\\sum_{k=t+1}^n \\binom{n}{k} p^k (1-p)^{n-k}}{\\sum_{k=t_0+1}^n \\binom{n}{k} p^k (1-p)^{n-k}}. The mean residual lifetime is MRL(t) = \\frac{\\sum_{k=t+1}^n k \\binom{n}{k} p^k (1-p)^{n-k}}{\\sum_{k=t+1}^n \\binom{n}{k} p^k (1-p)^{n-k}}."
+    },
+    {
+      "normal": "The probability density function is f(t) = \\frac{1}{\\sqrt{2\\pi \\sigma^2}} e^{-\\frac{(t-\\mu)^2}{2\\sigma^2}}. The distribution function is F(t) = \\int_{-\\infty}^t \\frac{1}{\\sqrt{2\\pi \\sigma^2}} e^{-\\frac{(u-\\mu)^2}{2\\sigma^2}} du. The survivor function is R(t) = \\int_t^{\\infty} \\frac{1}{\\sqrt{2\\pi \\sigma^2}} e^{-\\frac{(u-\\mu)^2}{2\\sigma^2}} du. The failure rate function is z(t) = \\frac{\\frac{1}{\\sqrt{2\\pi \\sigma^2}} e^{-\\frac{(t-\\mu)^2}{2\\sigma^2}}}{\\int_t^{\\infty} \\frac{1}{\\sqrt{2\\pi \\sigma^2}} e^{-\\frac{(u-\\mu)^2}{2\\sigma^2}} du}. The mean time to failure is MTTF = \\int_{-\\infty}^\\infty t \\frac{1}{\\sqrt{2\\pi \\sigma^2}} e^{-\\frac{(t-\\mu)^2}{2\\sigma^2}} dt. The conditional survivor function is R(t | t_0) = \\frac{\\int_t^{\\infty} \\frac{1}{\\sqrt{2\\pi \\sigma^2}} e^{-\\frac{(u-\\mu)^2}{2\\sigma^2}} du}{\\int_{t_0}^{\\infty} \\frac{1}{\\sqrt{2\\pi \\sigma^2}} e^{-\\frac{(u-\\mu)^2}{2\\sigma^2}} du}. The mean residual lifetime is MRL(t) = \\frac{\\int_t^{\\infty} u \\frac{1}{\\sqrt{2\\pi \\sigma^2}} e^{-\\frac{(u-\\mu)^2}{2\\sigma^2}} du}{\\int_t^{\\infty} \\frac{1}{\\sqrt{2\\pi \\sigma^2}} e^{-\\frac{(u-\\mu)^2}{2\\sigma^2}} du}."
+    },
+    {
+      "log-normal": "The probability density function is f(t) = \\frac{1}{t \\sqrt{2\\pi \\sigma^2}} e^{-\\frac{(\\ln(t)-\\mu)^2}{2\\sigma^2}}. The distribution function is F(t) = \\int_{0}^t \\frac{1}{u \\sqrt{2\\pi \\sigma^2}} e^{-\\frac{(\\ln(u)-\\mu)^2}{2\\sigma^2}} du. The survivor function is R(t) = \\int_t^{\\infty} \\frac{1}{u \\sqrt{2\\pi \\sigma^2}} e^{-\\frac{(\\ln(u)-\\mu)^2}{2\\sigma^2}} du. The failure rate function is z(t) = \\frac{\\frac{1}{t \\sqrt{2\\pi \\sigma^2}} e^{-\\frac{(\\ln(t)-\\mu)^2}{2\\sigma^2}}}{\\int_t^{\\infty} \\frac{1}{u \\sqrt{2\\pi \\sigma^2}} e^{-\\frac{(\\ln(u)-\\mu)^2}{2\\sigma^2}} du}. The mean time to failure is MTTF = \\int_{0}^\\infty t \\frac{1}{t \\sqrt{2\\pi \\sigma^2}} e^{-\\frac{(\\ln(t)-\\mu)^2}{2\\sigma^2}} dt. The conditional survivor function is R(t | t_0) = \\frac{\\int_t^{\\infty} \\frac{1}{u \\sqrt{2\\pi \\sigma^2}} e^{-\\frac{(\\ln(u)-\\mu)^2}{2\\sigma^2}} du}{\\int_{t_0}^{\\infty} \\frac{1}{u \\sqrt{2\\pi \\sigma^2}} e^{-\\frac{(\\ln(u)-\\mu)^2}{2\\sigma^2}} du}. The mean residual lifetime is MRL(t) = \\frac{\\int_t^{\\infty} u \\frac{1}{u \\sqrt{2\\pi \\sigma^2}} e^{-\\frac{(\\ln(u)-\\mu)^2}{2\\sigma^2}} du}{\\int_t^{\\infty} \\frac{1}{u \\sqrt{2\\pi \\sigma^2}} e^{-\\frac{(\\ln(u)-\\mu)^2}{2\\sigma^2}} du}."
+    },
+    {
+      "beta": "The probability density function is f(t) = \\frac{t^{\\alpha-1} (1-t)^{\\beta-1}}{B(\\alpha, \\beta)}. The distribution function is F(t) = \\int_{0}^t \\frac{u^{\\alpha-1} (1-u)^{\\beta-1}}{B(\\alpha, \\beta)} du. The survivor function is R(t) = \\int_t^1 \\frac{u^{\\alpha-1} (1-u)^{\\beta-1}}{B(\\alpha, \\beta)} du. The failure rate function is z(t) = \\frac{\\frac{t^{\\alpha-1} (1-t)^{\\beta-1}}{B(\\alpha, \\beta)}}{\\int_t^1 \\frac{u^{\\alpha-1} (1-u)^{\\beta-1}}{B(\\alpha, \\beta)} du}. The mean time to failure is MTTF = \\int_{0}^1 t \\frac{t^{\\alpha-1} (1-t)^{\\beta-1}}{B(\\alpha, \\beta)} dt. The conditional survivor function is R(t | t_0) = \\frac{\\int_t^1 \\frac{u^{\\alpha-1} (1-u)^{\\beta-1}}{B(\\alpha, \\beta)} du}{\\int_{t_0}^1 \\frac{u^{\\alpha-1} (1-u)^{\\beta-1}}{B(\\alpha, \\beta)} du}. The mean residual lifetime is MRL(t) = \\frac{\\int_t^1 u \\frac{u^{\\alpha-1} (1-u)^{\\beta-1}}{B(\\alpha, \\beta)} du}{\\int_t^1 \\frac{u^{\\alpha-1} (1-u)^{\\beta-1}}{B(\\alpha, \\beta)} du}."
+    },
+    {
+      "exponential": "It corresponds to a constant failure rate. The probability density function is f(t) = \\lambda e^{-\\lambda t}. The distribution function is F(t) = 1 - e^{-\\lambda t}. The survivor function is R(t) = e^{-\\lambda t}. The failure rate function is z(t) = \\lambda. The mean time to failure is MTTF = \\frac{1}{\\lambda}. The conditional survivor function is R(t | t_0) = e^{-\\lambda t}. The mean residual lifetime is MRL(t) = \\frac{1}{\\lambda}."
+    },
+    {
+      "Poisson": "The probability density function is f(t) = \\frac{\\lambda^t e^{-\\lambda}}{t!}. The distribution function is F(t) = \\sum_{k=0}^t \\frac{\\lambda^k e^{-\\lambda}}{k!}. The survivor function is R(t) = 1 - \\sum_{k=0}^t \\frac{\\lambda^k e^{-\\lambda}}{k!}. The failure rate function is z(t) = \\frac{\\frac{\\lambda^t e^{-\\lambda}}{t!}}{1 - \\sum_{k=0}^t \\frac{\\lambda^k e^{-\\lambda}}{k!}}. The mean time to failure is MTTF = \\lambda. The conditional survivor function is R(t | t_0) = \\frac{1 - \\sum_{k=t+1}^\\infty \\frac{\\lambda^k e^{-\\lambda}}{k!}}{1 - \\sum_{k=t_0+1}^\\infty \\frac{\\lambda^k e^{-\\lambda}}{k!}}. The mean residual lifetime is MRL(t) = \\frac{1}{\\lambda}."
+    },
+    {
+      "gamma": "The gamma distribution is not a widely used time-to-failure distribution, but is considered to be adequate in cases where partial failures can exist and where a specific number of partial failures must occur before the item fails.The probability density function is f(t) = \\frac{\\lambda^k t^{k-1} e^{-\\lambda t}}{\\Gamma(k)}. The distribution function is F(t) = \\int_0^t \\frac{\\lambda^k u^{k-1} e^{-\\lambda u}}{\\Gamma(k)} du. The survivor function is R(t) = \\int_t^\\infty \\frac{\\lambda^k u^{k-1} e^{-\\lambda u}}{\\Gamma(k)} du. The failure rate function is z(t) = \\frac{\\frac{\\lambda^k t^{k-1} e^{-\\lambda t}}{\\Gamma(k)}}{\\int_t^\\infty \\frac{\\lambda^k u^{k-1} e^{-\\lambda u}}{\\Gamma(k)} du}. The mean time to failure is MTTF = \\frac{k}{\\lambda}. The conditional survivor function is R(t | t_0) = \\frac{\\int_t^\\infty \\frac{\\lambda^k u^{k-1} e^{-\\lambda u}}{\\Gamma(k)} du}{\\int_{t_0}^\\infty \\frac{\\lambda^k u^{k-1} e^{-\\lambda u}}{\\Gamma(k)} du}. The mean residual lifetime is MRL(t) = \\frac{k}{\\lambda}."
+    },
+    {
+      "weibull": "The Weibull distribution is a fundamental tool in reliability engineering, widely used to model time-to-failure data because it is very flexible and it can be adapted to many situations thanks to the parameters. Its probability density function is f(t) = (β/η)(t/η)^(β-1)e^(-(t/η)^β), where β is the shape parameter and η is the scale parameter. The cumulative distribution function is F(t) = 1 - e^(-(t/η)^β), and the survivor function is R(t) = e^(-(t/η)^β). The failure rate function is z(t) = (β/η)(t/η)^(β-1), highlighting failure rate dynamics. The mean time to failure (MTTF) is ηΓ(1 + 1/β), where Γ is the gamma function. The conditional survivor function is R(t | t₀) = e^(-(t/η)^β) / e^(-(t₀/η)^β), describing survival probability beyond t given survival up to t₀. The mean residual lifetime (MRL) is MRL(t) = ηΓ(1 + 1/β, (t/η)^β) / R(t), where Γ is the upper incomplete gamma function."
+    },
+    {
+      "Sampling": "To determine appropriate sample sizes or testing times, several statistical and reliability methods are used. Power analysis helps identify sample sizes required to detect a specific effect, considering Type I (false positive) and Type II (false negative) errors, with common confidence levels of 95% or 99%. Formulas such as n = (Zα/2 ⋅ σ / E)^2 for normal distribution and n = (Zα/2^2 ⋅ λ) / r for exponential distribution are used in reliability testing. Accelerated life testing (ALT) estimates testing times by accelerating failure rates. Sample size formulas for proportions and means are n = (Zα/2^2 ⋅ p(1-p)) / E^2 for proportions, and n = σ^2 / E^2 for means with known variance. T-distribution, Chi-squared, and Normal distribution tables aid sample size determination. Practical considerations, such as balancing sample size with resources, expected failure rates, and available time, are essential for reliability testing."
+    },
+    {
+      "Sources of data": "Quantitative system reliability analyses rely on four main types of input data. Technical data are needed to understand the functions and the functional requirements and to establish a system model. Technical data are usually supplied by the system vendors. Operational and environmental data are necessary to define the actual operating context for the system. Maintenance data, in the form of procedures, resources, quality, and durations, are necessary to establish the system model, and to be able to determine the system reliability. Failure data, that is, information about failure modes and failure causes, time-to-failure distributions, and various parameters. Operational, environmental, and maintenance data are system specific and can usually not be found in any databases. Reliability data can generally be obtained from the following sources: 1) Field (i.e., operational) failure event data from the company where the study object is to be used. The failure event data are usually available from the plant’s computerized maintenance management system. To provide parameter estimates, the data has to be analyzed by methods as presented in Chapter 14. 2) Generic reliability databases where the items are classified in broad groups without information about manufacturer, make, and item specifications. OREDA (2015), for example, presents estimates for items such as “centrifugal pump; oil processing”, “gas turbine; aeroderivative (3000–10000 kW)”, and the like. 3) Sources providing information about failure modes and failure modes distributions, such as FMD (2016). 4) Expert judgment is sometimes the only option available to obtain input parameters. The procedure to obtain expert judgments can be more or less structured (e.g., see Meyer and Booker, 2001). 5) Data from manufacturers. These estimates may be based on (i) feedback to the manufacturer from practical use of the items, (ii) engineering analyses of the items, sometimes combined with some test results, (iii) warranty data, and obviously, a combination of all three types. 6) Reliability prediction models, usually combined with a base case component reliability database, such as MIL-HDBK-217F (1995). 7) Research reports and papers sometimes present reliability studies of specific items, including the input reliability data. 8) Data from reliability testing. The testing may be part of the item’s qualification process or be available from testing of similar items."
+    },
+    {
+      "FRACAS": "A FRACAS is a system that provides a systematic way for reporting, classifying, analyzing failures and planning preventative or correct actions in response to those failures. A typical FRACAS system consists of the following steps; 1. Failure Reporting (FR). The failures related to a piece of equipment are reported through a standard form (such as failure information in a work order). 2. Analysis (A). Is using the data to identify the cause of failure. This may be using a Pareto Analysis to identify the most important issue to address and then using other techniques to dive into the issue and determine the cause. 3. Corrective Actions (CA). Once the cause has been identified, the corrective (or preventative) actions must be implemented to prevent the recurrence of the failure. Ideally, these are documented through a formal change management program to ensure the learnings are incorporated into new equipment designs."
+    },
+    {
+      "confidence interval": "a is a percentage. A confidence interval with confidence level 1-a is such that 1-a of the time, the true value is contained in the confidence interval.For a population mean with known variance, the confidence interval (CI) is calculated as: CI = x̄ ± Z × (σ/√n). When the population variance is unknown, the T-distribution is used: CI = x̄ ± t × (s/√n). For variance, the CI is computed using the Chi-squared distribution: CI = [(n-1)s²]/χ²(α/2) ≤ σ² ≤ [(n-1)s²]/χ²(1-α/2), where s² is the sample variance and χ² is the Chi-squared critical value."
+    },
+    {
+      "Failure analysis": "Here are the main tools used to analyze failures. Methods include the 'Five Why,' which asks 'why' repeatedly to find root causes; Ishikawa/Fishbone diagrams to categorize causes and effects; Cause and Effect Analysis/Causal Factor Tree to display causal dependencies; Failure Modes and Effects/Criticality Analysis to define failure modes and address critical issues; Fault or Logic Tree Analysis to trace failures to their roots; Barrier Analysis to examine pathways and barriers for hazards; Change Analysis/Kepner-Tregoe to compare problem and non-problem situations; Pareto Charts to prioritize problems based on frequency; and Data Analytics to transform and model data for insights."
+    },
+    {
+      "Statistical Process control": "Statistical Process Control (SPC) and process capability studies are essential tools in quality control and reliability engineering. SPC uses control charts to monitor process stability and variability over time. Key control charts include the X-bar and R-chart for variable data and p-charts for attribute data. Process capability studies evaluate how well a process performs relative to its specification limits using indices such as Cp = (USL - LSL) / (6σ), where USL and LSL are the upper and lower specification limits, and σ is the process standard deviation. The Cpk index, defined as Cpk = min((USL - μ) / (3σ), (μ - LSL) / (3σ)), accounts for process centering. Reliable processes exhibit Cp and Cpk values above 1.33. By reducing variability, these methods improve product reliability and minimize defects."
+    },
+    {
+      "Censoring": "When censoring occurs, we cannot always observe the true time-to-failure T; instead, we observe the survival time, the time until failure or censoring. This involves two independent processes: a failure process and a censoring process. The observed time for item i is min(Ti, Ci), where Ti is the failure time and Ci is the censoring time. Each observation ti has an indicator δi, defined as δi = 1 if ti ends with a failure (Ti < Ci) and δi = 0 if it ends with censoring (Ti > Ci). The dataset consists of n pairs (ti, δi), representing survival time and whether the event ended with failure or censoring. Survival time is typically measured from when the item is new, but in practical cases, items may already have an initial age t(0)i when observation begins."
+    }
+    
+  ]
+}
+
+  
