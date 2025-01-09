@@ -1,40 +1,46 @@
-"""
-Generate the submission file given a function that is able to generate 1 answer to 1 question
-"""
-
 from dataclasses import dataclass
 import pandas as pd
+from src.utils import logger
+from openai import OpenAI
+from abc import ABC, abstractmethod
 
 ALLOWED_ANSWER = ["a", "b", "c", "d"]
 
 
 @dataclass
-class SubmissionBase:
-    questions_df: pd.DataFrame
-    print_avancement = True
+class SubmissionBase(ABC):
+    """
+    The base class to build a submission for the Kaggle competition.
+    Allows to ask questions to the IA assistant and get the answers, and save them
+    in a CSV file.
+    """
 
+    questions_df: pd.DataFrame
+    openai_client: OpenAI
+    print_advancement = True
     _submission: pd.DataFrame = None
 
+    @abstractmethod
     def get_1_answer(self, q: str) -> str:
-        """This function should be implemented for all tries of prompt engineering"""
-        raise NotImplementedError(
-            "The function should be implemented specifically in a subclass"
-        )
+        """
+        Core function that returns a single answer to a question.
+        """
+        pass
 
-    def _get_submission(self) -> pd.DataFrame:
+    def _get_submission(self, fake_multiple_attempts=False) -> pd.DataFrame:
         def check_answer(a: str, prediction_i, question_i) -> str:
-            try:
-                assert a in ALLOWED_ANSWER
-            except:
-                print(
-                    f' !! Error Detected : The answer given "{a}" is not acceptable, it should be in {ALLOWED_ANSWER}'
+            assert a in ALLOWED_ANSWER, f"Answer {a} is not in {ALLOWED_ANSWER}"
+            if self.print_advancement:
+                logger.info(
+                    f" --> Prediction {prediction_i}, question {question_i} : {a}"
                 )
-            if self.print_avancement:
-                print(f" --> Prediction {prediction_i}, question {question_i} : {a}")
             return a
 
         df = self.questions_df.copy()
         for i in range(1, 6):
+            if i != 1 and fake_multiple_attempts:
+                df[f"predition_{i}"] = df["predition_1"]
+                continue
             df[f"predition_{i}"] = df.apply(
                 lambda row: check_answer(
                     self.get_1_answer(row["question"]), i, row["question_id"]
@@ -43,20 +49,18 @@ class SubmissionBase:
             )
         return df.drop("question", axis=1)
 
-    def get_submission(self) -> pd.DataFrame:
+    def get_submission(
+        self,
+        save_path: str | None = "generated/submission.csv",
+        fake_multiple_attempts=False,
+    ) -> pd.DataFrame:
         if self._submission is None:
-            self._submission = self._get_submission()
+            self._submission = self._get_submission(
+                fake_multiple_attempts=fake_multiple_attempts
+            )
+            if save_path:
+                self._submission.to_csv(save_path, index=False)
         return self._submission
-
-    def score(self):
-        from kaggle_score import get_score
-
-        return get_score(self.get_submission())
-
-    def submission_to_csv(self, fname="generated/submission.csv"):
-        df = self.get_submission()
-        df.to_csv(fname, index=False)
-        return df
 
 
 class SequentialQuestions(SubmissionBase):
@@ -77,14 +81,6 @@ class SequentialQuestions(SubmissionBase):
         Returns:
             the list of messages in the chat with the assistant
         """
-        from openai import OpenAI
-        import os
-
-        client = OpenAI(
-            api_key=os.environ.get(
-                "OPENAI_API_KEY"
-            ),  # This is the default and can be omitted
-        )
 
         messages = [
             {"role": "system", "content": context},
@@ -93,11 +89,9 @@ class SequentialQuestions(SubmissionBase):
         for q in questions:
             messages += [{"role": "user", "content": q}]
 
-            chat = client.chat.completions.create(
+            chat = self.openai_client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=messages,
-                # temperature=0.61,
-                # max_completion_tokens=50,
             )
             r = chat.choices[0].message.content
 
@@ -106,17 +100,12 @@ class SequentialQuestions(SubmissionBase):
         return messages
 
     def test(self, n=None) -> pd.DataFrame:
-        df = pd.read_csv("train.csv")
+        df = pd.read_csv("data/train.csv")
         if isinstance(n, int):
             df = df[:n]
 
         def get_answer(row):
             logs = self.get_1_answer(row["question"], return_log=True)
-            if self.print_avancement:
-                print(row["question_id"])
-                for i in logs:
-                    print(i)
-                print("")
             return pd.Series({k: v for k, v in logs})
 
         df_logs = df.apply(lambda row: get_answer(row), axis=1)
@@ -126,9 +115,10 @@ class SequentialQuestions(SubmissionBase):
 
 
 if __name__ == "__main__":
-    questions = pd.read_csv("test.csv")
+    questions = pd.read_csv("data/test.csv")
 
     ai = SequentialQuestions(questions)
+    ai.print_advancement = False
     r = ai._ask_questions_in_a_row(
         context="Hello World",
         questions=[
