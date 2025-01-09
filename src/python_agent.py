@@ -1,5 +1,6 @@
 from openai import OpenAI
 import json
+import ast
 
 if __name__ != "__main__":
     from src.utils import logger, save_json
@@ -29,6 +30,18 @@ def craft_error_prompt(message: str):
 def craft_result_message(result: str):
     return f"""The python script successfully returned: {result}.
     Answer the initial question using this result. If possible do not use python again"""
+
+
+def add_print_to_script(script: str):
+    """
+    Check if last node is an expression (instead of a print statement),
+    and if it is, add a print statement.
+    """
+    tree = ast.parse(script)
+    last_node = tree.body[-1] if tree.body else None
+    if isinstance(last_node, ast.Expr):
+        return script + f"\nprint({ast.unparse(last_node.value)})"
+    return script
 
 
 class ToolError(Exception):
@@ -148,7 +161,7 @@ class PythonAgent:
         if tool_call.function.name == "execute_python_script":
             logger.info("Found a python script to execute.")
             arguments = json.loads(tool_call.function.arguments)
-            script = arguments["script"]
+            script = add_print_to_script(arguments["script"])
             try:
                 logger.info(f"Executing the following script: \n\n{script}\n```")
                 self._messages.append(
