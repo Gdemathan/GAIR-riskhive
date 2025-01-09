@@ -61,26 +61,29 @@ class SubmissionBase(ABC):
                 answer = self._forcibly_extract_answer(a)
                 if self.print_advancement:
                     logger.info(
-                        f" --> Prediction {prediction_i} for question {question_i} : {a}"
+                        f" --> Prediction {prediction_i} for question {question_i} : {a} (forcibly extracted answer) <-- "
                     )
                 return answer
             if self.print_advancement:
                 logger.info(
-                    f" --> Prediction {prediction_i} for question {question_i} : {a}"
+                    f" --> Prediction {prediction_i} for question {question_i} : {a} <-- "
                 )
             return a
 
         df = self.questions_df.copy()
+
         for i in range(1, 6):
             if i != 1 and fake_multiple_attempts:
                 df[f"prediction_{i}"] = df["prediction_1"]
                 continue
-            df[f"prediction_{i}"] = df.apply(
-                lambda row: check_answer(
-                    self.get_1_answer(row["question"]), i, row["question_id"]
-                ),
-                axis=1,
-            )
+            for j in range(0, len(df)):
+                if f"prediction_{i}" not in df.columns:
+                    df[f"prediction_{i}"] = None
+
+                df.at[j, f"prediction_{i}"] = check_answer(
+                    self.get_1_answer(df["question"][j]), i, df["question_id"][j]
+                )
+
         return df.drop("question", axis=1)
 
     def get_submission(

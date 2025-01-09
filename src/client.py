@@ -11,7 +11,9 @@ except Exception:
 
 openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
-qdrant_client = QdrantClient(
-    url=os.environ.get("QDRANT_URL"),
-    api_key=os.environ.get("QDRANT_API_KEY"),
-)
+# qdrant_client = QdrantClient(
+#     url=os.environ.get("QDRANT_URL"),
+#     api_key=os.environ.get("QDRANT_API_KEY"),
+# )
+
+qdrant_client = QdrantClient(":memory:")

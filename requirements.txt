@@ -6,3 +6,7 @@ scikit-learn
 pydantic
 qdrant-client
 fastembed
+pypdf
+progressbar2
+sentence-transformers
+reliability
