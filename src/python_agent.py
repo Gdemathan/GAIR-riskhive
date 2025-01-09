@@ -218,12 +218,18 @@ class PythonAgent:
         """
         Injects the python agent directly in the OpenAI API.
         """
+        if (
+            hasattr(openai_client, "is_python_agent_injected")
+            and openai_client.is_python_agent_injected
+        ):
+            return openai_client
         agent = cls(
             openai_client,
             max_retries=3,
             messages_log_path=messages_log_path,
             tool_prompt=tool_prompt,
         )
+        openai_client.is_python_agent_injected = True
         openai_client.chat.completions.create = agent.ask_with_python
         return openai_client
 
