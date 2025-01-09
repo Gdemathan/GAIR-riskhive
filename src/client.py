@@ -6,7 +6,7 @@ try:
     import dotenv
 
     dotenv.load_dotenv()
-except:
+except Exception:
     pass
 
 openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))

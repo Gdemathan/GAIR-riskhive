@@ -19,7 +19,7 @@ client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 SYSTEM_PROMPT = """
 You are a reliability expert. Respond with a, b, c, or d.
-""" 
+"""
 
 DOUBT_PROMPT = """
 I have a doubt. Are you totally sure ? Double-check your answer and explain briefly in 2 steps.
@@ -71,7 +71,7 @@ def provide_answers(input_file: str):
         )
 
         answer = response.choices[0].message.parsed
-        if (answer.final_answer != row["answer"]):
+        if answer.final_answer != row["answer"]:
             print("MISTAKE FOUND!")
             print(f"Question: {question}\n")
             print(f"First answer: {first_answer}")
@@ -82,9 +82,8 @@ def provide_answers(input_file: str):
         print("\n\n")
     print(f"Final score: {score}/{len(data)}")
 
-
     os.makedirs("generated", exist_ok=True)
     print("Predictions saved successfully.")
 
 
-provide_answers("train.csv")
+provide_answers("data/train.csv")
