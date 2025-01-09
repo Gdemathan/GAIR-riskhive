@@ -3,8 +3,15 @@ import pandas as pd
 from src.utils import logger
 from openai import OpenAI
 from abc import ABC, abstractmethod
+from pydantic import BaseModel
+from typing import Literal
+
 
 ALLOWED_ANSWER = ["a", "b", "c", "d"]
+
+
+class Choice(BaseModel):
+    choice: Literal["a", "b", "c", "d"]
 
 
 @dataclass
@@ -27,12 +34,37 @@ class SubmissionBase(ABC):
         """
         pass
 
+    def _forcibly_extract_answer(self, q: str) -> str:
+        """
+        Extracts the answer from the question.
+        """
+        return (
+            self.openai_client.beta.chat.completions.parse(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": q},
+                    {"role": "user", "content": "Ok now give me the answer"},
+                ],
+                response_format=Choice,
+            )
+            .choices[0]
+            .message.parsed.choice
+        )
+
     def _get_submission(self, fake_multiple_attempts=False) -> pd.DataFrame:
         def check_answer(a: str, prediction_i, question_i) -> str:
-            assert a in ALLOWED_ANSWER, f"Answer {a} is not in {ALLOWED_ANSWER}"
+            try:
+                assert a in ALLOWED_ANSWER, f"Answer {a} is not in {ALLOWED_ANSWER}"
+            except Exception:
+                answer = self._forcibly_extract_answer(a)
+                if self.print_advancement:
+                    logger.info(
+                        f" --> Prediction {prediction_i} for question {question_i} : {a}"
+                    )
+                return answer
             if self.print_advancement:
                 logger.info(
-                    f" --> Prediction {prediction_i}, question {question_i} : {a}"
+                    f" --> Prediction {prediction_i} for question {question_i} : {a}"
                 )
             return a
 
