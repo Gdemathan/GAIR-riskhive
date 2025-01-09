@@ -15,7 +15,7 @@ def execute_python_script(script: str) -> str:
         python_executable = os.path.join(venv_path, "Scripts", "python.exe")
     else:
         python_executable = os.path.join(venv_path, "bin", "python")
-    if os.getlogin()=='Luc':
+    if os.getlogin() == "Luc":
         python_executable = r"C:\Users\Luc\anaconda3\python.exe"
 
     if not os.path.exists(python_executable):
@@ -44,7 +44,7 @@ def execute_python_script(script: str) -> str:
     return result.stdout.strip()
 
 
-GPT_tool_python_script = {
+PYTHON_TOOL_DICT = {
     "type": "function",
     "function": {
         "name": "execute_python_script",
@@ -65,7 +65,7 @@ GPT_tool_python_script = {
 }
 
 
-if __name__=='__main__':
+if __name__ == "__main__":
     script = """
 import numpy as np
 a = np.random.randint(0,100)
@@ -73,4 +73,4 @@ print(a)
 #1/0
 """
     res = execute_python_script(script)
-    print(f'Result of the script: {res}')
+    print(f"Result of the script: {res}")

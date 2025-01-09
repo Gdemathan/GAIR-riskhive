@@ -1,86 +1,15 @@
-import subprocess
-import os
 from openai import OpenAI
 import json
 
-if __name__ == "__main__":  # for local file testing purposes
-    from utils import logger, save_json
-    from client import openai_client
-else:
+if __name__ != "__main__":
     from src.utils import logger, save_json
+    from src.client import openai_client
+    from src.handler_python import execute_python_script, PythonError, PYTHON_TOOL_DICT
 
-
-class PythonError(Exception):
-    def __init__(self, message):
-        super().__init__(message)
-
-
-def execute_python_script(script: str) -> str:
-    time_out = 5
-
-    venv_path = ".venv"
-    if os.name == "nt":
-        python_executable = os.path.join(venv_path, "Scripts", "python.exe")
-    else:
-        python_executable = os.path.join(venv_path, "bin", "python")
-
-    if not os.path.exists(python_executable):
-        raise FileNotFoundError(f"Python interpreter not found at: {python_executable}")
-
-    with open("sandbox_script.py", "w") as file:
-        file.write(script)
-
-    try:
-        result = subprocess.run(
-            [python_executable, "sandbox_script.py"],
-            capture_output=True,
-            text=True,
-            timeout=time_out,
-        )
-    finally:
-        if os.path.exists("sandbox_script.py"):
-            os.remove("sandbox_script.py")
-
-    if result.returncode != 0:
-        raise PythonError(f"Script execution failed: {result.stderr.strip()}")
-
-    if result.stdout.strip() == "":
-        return None
-
-    return result.stdout.strip()
-
-
-tool_dict = {
-    "type": "function",
-    "function": {
-        "name": "execute_python_script",
-        "description": "Executes a python script in a sandboxed environment. Return the stdout printed by the script.",
-        "strict": True,
-        "parameters": {
-            "type": "object",
-            "required": ["script"],
-            "properties": {
-                "script": {
-                    "type": "string",
-                    "description": "The python script to execute.",
-                }
-            },
-            "additionalProperties": False,
-        },
-    },
-}
 
 DEFAULT_TOOL_PROMPT = """You can use python whenever you need to perform complex calculations or operations.
  When needed write a python script that returns the result."""
 
-USER_PROMPT = """Please sort this list : [1,6,3,5,2,5,6,2,1]."""
-
-USER_EMPTY_PROMPT = """Please sort this list : [1,6,3,5,2,5,6,2,1].
-For debug purpose, if you use python please start by making it bug : it must not return anything"""
-
-USER_BUGGED_PROMPT = """Please sort this list : [1,6,3,5,2,5,6,2,1].
-For debug purpose, if you use python please start by making it bug. 
-You must introduce this line '1/0', the script has to crash (not only return nothing)"""
 
 RETRY_PROMPT = """I'm sorry, but your script did not return shit. Please make a script that actually returns the result"""
 
@@ -262,28 +191,16 @@ class PythonAgent:
 
 
 if __name__ == "__main__":
-    success_agent = PythonAgent(openai_client)
-    answer = success_agent.ask_with_python(
+    from utils import logger, save_json
+    from client import openai_client
+    from handler_python import execute_python_script, PythonError, PYTHON_TOOL_DICT
+
+    USER_PROMPT = """Please sort this list : [1,6,3,5,2,5,6,2,1]."""
+
+    PythonAgent.inject_python(openai_client)
+    answer = openai_client.chat.completions.create(
         [
             {"role": "system", "content": "Hello!"},
             {"role": "user", "content": USER_PROMPT},
-        ]
-    )
-    empty_agent = PythonAgent(
-        openai_client, messages_log_path="generated/empty_messages.json"
-    )
-    answer = empty_agent.ask_with_python(
-        [
-            {"role": "system", "content": "Hello!"},
-            {"role": "user", "content": USER_EMPTY_PROMPT},
-        ]
-    )
-    bug_agent = PythonAgent(
-        openai_client, messages_log_path="generated/bug_messages.json"
-    )
-    answer = bug_agent.ask_with_python(
-        [
-            {"role": "system", "content": "Hello!"},
-            {"role": "user", "content": USER_BUGGED_PROMPT},
         ]
     )
