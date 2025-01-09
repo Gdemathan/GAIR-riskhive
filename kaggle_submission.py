@@ -37,6 +37,9 @@ class SubmissionBase(ABC):
         """
         Extracts the answer from the question.
         """
+        logger.error(
+            f"Answer not in allowed answers : {q}. Forcibly extracting answer..."
+        )
         return (
             self.openai_client.beta.chat.completions.parse(
                 model="gpt-4o-mini",

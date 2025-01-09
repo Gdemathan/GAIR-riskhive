@@ -8,14 +8,22 @@ if __name__ != "__main__":
 
 
 DEFAULT_TOOL_PROMPT = """You can use python whenever you need to perform complex calculations or operations.
- When needed write a python script that returns the result."""
+ When needed write a python script that prints only the final result.
+ Example: 
+ 
+ list = [4,1,2]
+ print(sorted(list))
+ Do not forget the "print" statement.
+ """
 
 
-RETRY_PROMPT = """I'm sorry, but your script did not return shit. Please make a script that actually returns the result"""
+RETRY_PROMPT = """Be careful, you script does not return the result.
+Make sure it prints the result at the end of the script."""
 
 
 def craft_error_prompt(message: str):
-    return f"""Please make code that works, your script just crashed mate. Here is the error: {message}. Fix it in the script"""
+    return f"""Please make code that works, your script just crashed. Here is the error: {message}.
+    Please fix the cause of this error in your script. For instance, np.gamma does not exist, it is np.random.gamma."""
 
 
 def craft_result_message(result: str):
@@ -128,7 +136,7 @@ class PythonAgent:
 
         answer = self._ask_llm(self._messages)
 
-        if answer.choices[0].finish_reason != "tool_calls":
+        if answer.choices[0].finish_reason == "stop":
             self._num_retries = 0
             all_messages = self._messages + [
                 {"role": "assistant", "content": answer.choices[0].message.content}
