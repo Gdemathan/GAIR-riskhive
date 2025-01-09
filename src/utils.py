@@ -58,7 +58,6 @@ def read_json(fname):
     with open(fname, "r", encoding="utf-8") as fichier:
         loaded = json.load(fichier)
 
-    print(f"... File loaded {loaded}")
     return loaded
 
 
@@ -72,8 +71,7 @@ RISKHIVE_STRING = """
 ||         |_________|           ||
 ||                               ||
 ===================================
-[STATUS]: All systems go. Ready to analyze some risk!
-
+[STATUS]: All systems up. Ready to analyze some risk!
 """
 
 

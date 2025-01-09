@@ -8,6 +8,7 @@ import pandas as pd
 import os
 from pydantic import BaseModel
 from typing import Literal
+from src.utils import logger
 
 import dotenv
 
@@ -43,7 +44,7 @@ def provide_answers(input_file: str):
         raise ValueError("The input file must have a 'question' column.")
 
     for index, row in data.iterrows():
-        print(f"Processing question number {index + 1}/{len(data)}...")
+        logger.info(f"Processing question number {index + 1}/{len(data)}...")
         question = row["question"]
 
         messages = [
@@ -77,18 +78,18 @@ def provide_answers(input_file: str):
 
         answer = response.choices[0].message.parsed
         if answer.final_answer != row["answer"]:
-            print("MISTAKE FOUND!")
-            print(f"Question: {question}\n")
-            print(f"First answer: {first_answer}")
-            print(f"Final answer: {answer}")
-            print(f"Correct answer: {row['answer']}\n")
+            logger.info("MISTAKE FOUND!")
+            logger.info(f"Question: {question}\n")
+            logger.info(f"First answer: {first_answer}")
+            logger.info(f"Final answer: {answer}")
+            logger.info(f"Correct answer: {row['answer']}\n")
         else:
             score += 1
-        print("\n\n")
-    print(f"Final score: {score}/{len(data)}")
+        logger.info("\n\n")
+    logger.info(f"Final score: {score}/{len(data)}")
 
     os.makedirs("generated", exist_ok=True)
-    print("Predictions saved successfully.")
+    logger.info("Predictions saved successfully.")
 
 
 provide_answers("data/train.csv")

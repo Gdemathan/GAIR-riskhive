@@ -3,6 +3,7 @@ import os
 from pydantic import BaseModel
 from typing import Literal
 from src.client import openai_client
+from src.utils import logger
 
 
 class FullReasoning(BaseModel):
@@ -42,7 +43,7 @@ def answer_5_times(input_file: str):
     output_file["question_id"] = data["question_id"]
 
     for index, row in data.iterrows():
-        print(f"Processing question number {index + 1}/{len(data)}...")
+        logger.info(f"Processing question number {index + 1}/{len(data)}...")
         question = row["question"]
 
         messages = [
@@ -78,7 +79,7 @@ def answer_5_times(input_file: str):
 
     os.makedirs("generated", exist_ok=True)
     output_file.to_csv("generated/full_output.csv", index=False)
-    print("Predictions saved successfully.")
+    logger.info("Predictions saved successfully.")
 
 
 answer_5_times("data/test.csv")
