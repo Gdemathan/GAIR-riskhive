@@ -32,7 +32,7 @@ class PythonAgent:
     """
     A class that gives access to python script execution.
     It injects instructions in the system prompt, while giving access to the tool.
-    It handle all 3 cases: 
+    It handle all 3 cases:
     - success
     - the created script crashes
         -> will prompt to re-write the script, with the error
@@ -40,6 +40,7 @@ class PythonAgent:
         -> will prompt to return something
 
     """
+
     def __init__(
         self,
         client: OpenAI,
@@ -48,6 +49,7 @@ class PythonAgent:
         messages_log_path: str = "generated/messages.json",
     ):
         self.client = client
+        self.client._default_ask_llm = self.client.chat.completions.create
         self._num_retries = 0
         self.retry_prompt = RETRY_PROMPT
         self.tool_prompt = tool_prompt
@@ -55,11 +57,14 @@ class PythonAgent:
         self._api_params = {}
         self._override_args = True
         self._messages_log_path = messages_log_path
+        self._messages = []
+        logger.info("--- Python agent initialized ---\n")
 
     def _reset_internals(self):
         self._override_args = True
         self._num_retries = 0
         self._api_params = {}
+        self._messages = []
 
     def _append_tool_prompt_to_system(self, messages: list[dict]) -> list[dict]:
         def append_prompt(message):
@@ -74,7 +79,7 @@ class PythonAgent:
 
     def _ask_llm(self, messages: list[dict]):
         appended_messages = self._append_tool_prompt_to_system(messages)
-        return self.client.chat.completions.create(
+        return self.client._default_ask_llm(
             messages=appended_messages, **self._api_params
         )
 
@@ -96,14 +101,14 @@ class PythonAgent:
         """
         Ask a question and execute python script if needed. Params are the same as the OpenAI API.
         """
-        messages_copy = messages.copy()
+        self._messages = messages
         if self._num_retries >= self._max_retries:
-            save_json(messages_copy, self._messages_log_path)
+            save_json(self._messages, self._messages_log_path)
             self._reset_internals()
             raise ToolError("Max retries reached. Returning no output.")
 
         if self._override_args:
-            messages_copy = self._append_tool_prompt_to_system(messages_copy)
+            self._messages = self._append_tool_prompt_to_system(self._messages)
             self._api_params = {
                 "model": "gpt-4o-mini",
                 "temperature": temperature,
@@ -116,15 +121,16 @@ class PythonAgent:
                 "frequency_penalty": frequency_penalty,
                 "logit_bias": logit_bias,
                 "user": user,
-                "tools": [tool_dict],
+                "tools": [PYTHON_TOOL_DICT],
                 **kwargs,
             }
+            self._override_args = False
 
-        answer = self._ask_llm(messages_copy)
+        answer = self._ask_llm(self._messages)
 
         if answer.choices[0].finish_reason != "tool_calls":
             self._num_retries = 0
-            all_messages = messages_copy + [
+            all_messages = self._messages + [
                 {"role": "assistant", "content": answer.choices[0].message.content}
             ]
             save_json(all_messages, self._messages_log_path)
@@ -136,13 +142,19 @@ class PythonAgent:
             arguments = json.loads(tool_call.function.arguments)
             script = arguments["script"]
             try:
-                logger.info("Executing script...")
+                logger.info(f"Executing the following script: \n\n{script}\n```")
+                self._messages.append(
+                    {
+                        "role": "assistant",
+                        "content": f"Executing script: \n```python\n{script}\n",
+                    }
+                )
                 result = execute_python_script(script)
             except PythonError as e:
                 logger.error(f"An error occurred: {e}. Scolding model and retrying...")
                 self._num_retries += 1
                 return self.ask_with_python(
-                    messages=messages_copy
+                    messages=self._messages
                     + [
                         {
                             "role": "assistant",
@@ -157,13 +169,10 @@ class PythonAgent:
                 raise ToolError("An unexpected error occurred.")
 
             if result is None:
-                if self._num_retries >= self._max_retries:
-                    logger.info("Max retries reached. Returning no output.")
-                    raise ToolError("Max retries reached. Returning no output.")
                 logger.info("The script returned no output. Trying again")
                 self._num_retries += 1
                 return self.ask_with_python(
-                    messages=messages_copy
+                    messages=self._messages
                     + [
                         {
                             "role": "assistant",
@@ -176,9 +185,9 @@ class PythonAgent:
 
             logger.info("Script executed successfully.")
             logger.info(f"Prompting with the result: {result}")
-            self._num_retries += 1
-            return self.ask_with_python(
-                messages=messages_copy
+            self._num_retries = 0
+            response = self.ask_with_python(
+                messages=self._messages
                 + [
                     {
                         "role": "assistant",
@@ -188,6 +197,27 @@ class PythonAgent:
                 ],
                 **self._api_params,
             )
+            self._reset_internals()
+            return response
+
+    @classmethod
+    def inject_python(
+        cls,
+        openai_client: OpenAI,
+        messages_log_path: str = "generated/messages.json",
+        tool_prompt: str = DEFAULT_TOOL_PROMPT,
+    ):
+        """
+        Injects the python agent directly in the OpenAI API.
+        """
+        agent = cls(
+            openai_client,
+            max_retries=3,
+            messages_log_path=messages_log_path,
+            tool_prompt=tool_prompt,
+        )
+        openai_client.chat.completions.create = agent.ask_with_python
+        return openai_client
 
 
 if __name__ == "__main__":
