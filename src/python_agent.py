@@ -3,7 +3,7 @@ import json
 import ast
 
 if __name__ != "__main__":
-    from src.utils import logger, save_json
+    from src.utils import logger
     from src.client import openai_client
     from src.handler_python import execute_python_script, PythonError, PYTHON_TOOL_DICT
 
@@ -72,7 +72,6 @@ class PythonAgent:
         client: OpenAI,
         max_retries: int = 5,
         tool_prompt: str = DEFAULT_TOOL_PROMPT,
-        messages_log_path: str = "generated/messages.json",
     ):
         self.client = client
         self.client._default_ask_llm = self.client.chat.completions.create
@@ -82,7 +81,6 @@ class PythonAgent:
         self._max_retries = max_retries
         self._api_params = {}
         self._override_args = True
-        self._messages_log_path = messages_log_path
         self._messages = []
         logger.info("--- Python agent initialized ---\n")
 
@@ -120,7 +118,7 @@ class PythonAgent:
 
         try:
             return self.ask_with_python(messages, **kwargs)
-        except ToolError as e:
+        except Exception as e:
             logger.error(f"An error occurred: {e}")
             return self.client._default_ask_llm(
                 messages=messages
@@ -143,7 +141,6 @@ class PythonAgent:
         """
         self._messages = messages
         if self._num_retries >= self._max_retries:
-            save_json(self._messages, self._messages_log_path)
             self._reset_internals()
             raise ToolError("Max retries reached. Returning no output.")
 
@@ -160,10 +157,6 @@ class PythonAgent:
 
         if answer.choices[0].finish_reason == "stop":
             self._num_retries = 0
-            all_messages = self._messages + [
-                {"role": "assistant", "content": answer.choices[0].message.content}
-            ]
-            save_json(all_messages, self._messages_log_path)
             return answer
 
         tool_call = answer.choices[0].message.tool_calls[0]
@@ -236,7 +229,6 @@ class PythonAgent:
     def inject_python(
         cls,
         openai_client: OpenAI,
-        messages_log_path: str = "generated/messages.json",
         tool_prompt: str = DEFAULT_TOOL_PROMPT,
     ):
         """
@@ -250,7 +242,6 @@ class PythonAgent:
         agent = cls(
             openai_client,
             max_retries=3,
-            messages_log_path=messages_log_path,
             tool_prompt=tool_prompt,
         )
         openai_client.is_python_agent_injected = True
@@ -259,7 +250,7 @@ class PythonAgent:
 
 
 if __name__ == "__main__":
-    from utils import logger, save_json
+    from utils import logger
     from client import openai_client
     from handler_python import execute_python_script, PythonError, PYTHON_TOOL_DICT
 

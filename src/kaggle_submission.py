@@ -61,7 +61,7 @@ class SubmissionBase(ABC):
                 answer = self._forcibly_extract_answer(a)
                 if self.print_advancement:
                     logger.info(
-                        f" --> Prediction {prediction_i} for question {question_i} : {a} (forcibly extracted answer) <-- "
+                        f" --> Prediction {prediction_i} for question {question_i} : {answer} (forcibly extracted answer) <-- "
                     )
                 return answer
             if self.print_advancement:

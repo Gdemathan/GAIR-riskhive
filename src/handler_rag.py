@@ -1,13 +1,14 @@
 import numpy as np
 from qdrant_client import QdrantClient
 from tqdm import tqdm
+import os
 
 
 if __name__ == "__main__":
-    from utils import read_json
+    from utils import read_json, save_json, logger
     from client import openai_client
 else:
-    from src.utils import read_json
+    from src.utils import read_json, save_json, logger
     from src.client import openai_client, qdrant_client
 
 
@@ -64,6 +65,7 @@ class QdrantRAG(RAG):
         self.qdrant_client.set_sparse_model(self.SPARSE_MODEL)
 
         if not qdrant_client.collection_exists(self.collection_name):
+            print("Populating database...")
             qdrant_client.create_collection(
                 collection_name=self.collection_name,
                 vectors_config=qdrant_client.get_fastembed_vector_params(),
@@ -79,7 +81,6 @@ class QdrantRAG(RAG):
             qdrant_client.add(
                 collection_name=self.collection_name,
                 documents=documents,
-                # metadata=metadata,
                 ids=tqdm(range(len(documents))),
             )
 
@@ -87,22 +88,44 @@ class QdrantRAG(RAG):
         search_result = self.qdrant_client.query(
             collection_name=self.collection_name,
             query_text=text,
-            query_filter=None,  # If you don't want any filters for now
-            limit=limit,  # 5 the closest results
+            query_filter=None,
+            limit=limit,
         )
-        metadata = [hit.metadata for hit in search_result]
-        return metadata
+        doc = [hit.document for hit in search_result]
+        return doc
+
+
+SEED_PATH = "data/rag_db_seed.json"
 
 
 class HandMadeRAG(RAG):
     d = None
 
-    def __init__(self, rag_path, client=openai_client, use_qdrant=True):
-        self.rag_path = rag_path
-        self.json = read_json(self.rag_path)
-        self.client = client
+    def __init__(self, db_path, openai_client=openai_client, restart_db=False):
+        if restart_db and os.path.exists(db_path):
+            os.remove(db_path)
+        self.db_path = db_path
+        self.db = []
+        self.client = openai_client
+        if not os.path.exists(self.db_path):
+            self._populate_db(SEED_PATH, db_path)
+        self.db = read_json(self.db_path)
 
-    def _get_embedding(self, text: str) -> np.array:
+    def _populate_db(self, source_path: str, db_path: str):
+        try:
+            elements = read_json(source_path)
+            logger.info("Populating database...")
+            for i in tqdm(range(len(elements))):
+                element = elements[i]
+                embedding = self._get_embedding(element)
+                entry = {"text": element, "embedding": list(embedding)}
+                self.db.append(entry)
+                save_json(self.db, db_path)
+        except Exception as e:
+            logger.error(f"Error while populating the database: {e}")
+            os.remove(db_path)
+
+    def _get_embedding(self, text: str) -> np.ndarray:
         """
         Retrieves the embedding of a given text using a pre-defined OpenAI client.
 
@@ -121,12 +144,7 @@ class HandMadeRAG(RAG):
         return np.array(list_)
 
     def to_list(self):
-        return self.json
-
-    def to_dict(self) -> dict:
-        if self.d is None:
-            self.d = {k: self._get_embedding(str(k)) for k in self.to_list()}
-        return self.d
+        return self.db
 
     def __str__(self):
         short_dict = {k[:50]: v[:3] for k, v in self.to_dict().items()}
@@ -137,12 +155,18 @@ class HandMadeRAG(RAG):
 
         return _str
 
-    def search(self, question):
-        q_embedding = self._get_embedding(question)
-        cosine = {
-            k: cosine_similarity(v, q_embedding) for k, v in self.to_dict().items()
-        }
-        return max(cosine, key=lambda k: abs(cosine[k]))
+    def search(self, question, limit=1):
+        question_embedding = self._get_embedding(question)
+        return [
+            el["text"]
+            for el in sorted(
+                self.db,
+                key=lambda el: abs(
+                    cosine_similarity(np.array(el["embedding"]), question_embedding)
+                ),
+                reverse=True,
+            )[:limit]
+        ]
 
 
 if __name__ == "__main__":
