@@ -5,3 +5,4 @@ generated/
 __pycache__/
 RT_textbook.pdf
 RT_textbook.txt
+rag_db.json
