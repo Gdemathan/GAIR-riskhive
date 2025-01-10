@@ -1,20 +1,14 @@
-from openai import OpenAI
 import pandas as pd
 import os
 from pydantic import BaseModel
 from typing import Literal
-
-import dotenv
-
-dotenv.load_dotenv()
+from src.client import openai_client
+from src.utils import logger
 
 
 class FullReasoning(BaseModel):
     steps: list[str]
     final_answer: Literal["a", "b", "c", "d"]
-
-
-client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 
 SYSTEM_PROMPT = """
@@ -49,7 +43,7 @@ def answer_5_times(input_file: str):
     output_file["question_id"] = data["question_id"]
 
     for index, row in data.iterrows():
-        print(f"Processing question number {index + 1}/{len(data)}...")
+        logger.info(f"Processing question number {index + 1}/{len(data)}...")
         question = row["question"]
 
         messages = [
@@ -57,7 +51,7 @@ def answer_5_times(input_file: str):
             {"role": "user", "content": question},
         ]
 
-        first_response = client.chat.completions.create(
+        first_response = openai_client.chat.completions.create(
             model="gpt-4o-mini",
             messages=messages,
             temperature=0.61,
@@ -71,7 +65,7 @@ def answer_5_times(input_file: str):
             {"role": "user", "content": DOUBT_PROMPT},
         ]
 
-        response = client.beta.chat.completions.parse(
+        response = openai_client.beta.chat.completions.parse(
             model="gpt-4o-mini",
             messages=messages,
             temperature=0.61,
@@ -85,7 +79,7 @@ def answer_5_times(input_file: str):
 
     os.makedirs("generated", exist_ok=True)
     output_file.to_csv("generated/full_output.csv", index=False)
-    print("Predictions saved successfully.")
+    logger.info("Predictions saved successfully.")
 
 
-answer_5_times("test.csv")
+answer_5_times("data/test.csv")

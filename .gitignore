@@ -3,3 +3,5 @@
 generated/
 .vscode
 __pycache__/
+RT_textbook.pdf
+RT_textbook.txt
