@@ -1,89 +1,26 @@
 [
     {
         "id": "RM001",
-        "topic": "Risk Management Techniques",
-        "content": "Risk management involves the application of tools and processes such as FMEA, FTA, and Risk Matrices to identify, document, and track concerns in reliability engineering. These techniques prioritize risks based on safety, economic, performance, and customer satisfaction concerns."
+        "entry": "**Risk Management Techniques**: Risk management involves the application of tools and processes such as FMEA, FTA, and Risk Matrices to identify, document, and track concerns in reliability engineering. These techniques prioritize risks based on safety, economic, performance, and customer satisfaction concerns."
     },
     {
         "id": "RM002",
-        "topic": "Types of Risk",
-        "content": "Types of risks include technical, scheduling, safety, and financial risks. Each type affects reliability differently and requires tailored management strategies."
+        "entry": "**Types of Risk**: Types of risks include technical, scheduling, safety, and financial risks. Each type affects reliability differently and requires tailored management strategies."
     },
     {
         "id": "RM003",
-        "topic": "Fault Tree Analysis (FTA)",
-        "content": "Fault Tree Analysis (FTA) is a deductive failure analysis technique used to identify the root causes of a system failure by modeling failure propagation using logic gates. The TOP event represents the system failure, which is decomposed into contributing events through AND and OR gates.",
-        "formulas": [
-            {
-                "description": "System Failure Probability (for independent events)",
-                "formula_latex": "P_{system} = 1 - \\prod_{i=1}^{n}(1 - P_{i})"
-            },
-            {
-                "description": "System Failure Probability (for series systems)",
-                "formula_latex": "P_{system} = \\prod_{i=1}^{n}P_{i}"
-            },
-            {
-                "description": "System Failure Probability (for parallel systems)",
-                "formula_latex": "P_{system} = 1 - \\prod_{i=1}^{n}(1 - P_{i})"
-            }
-        ],
-        "example": "Consider a system with two components: A with failure probability 0.1 and B with failure probability 0.2. For a parallel configuration, the failure probability is calculated as: \\\\[P_{system} = 1 - (1 - 0.1)(1 - 0.2) = 0.28\\].",
-        "schema_explanation": "A fault tree is structured with a TOP event linked to basic and intermediate events through AND and OR gates, with basic events representing component failures and intermediate events representing partial failure conditions.",
-        "symbols": {
-            "AND Gate": "Failure occurs if all contributing events fail.",
-            "OR Gate": "Failure occurs if any contributing event fails.",
-            "Basic Event": "A component failure that does not need further decomposition."
-        }
+        "entry": "**Fault Tree Analysis (FTA)**: Fault Tree Analysis (FTA) is a deductive failure analysis technique used to identify the root causes of a system failure by modeling failure propagation using logic gates. The TOP event represents the system failure, which is decomposed into contributing events through AND and OR gates. Formulas include: System Failure Probability (for independent events): `P_system = 1 - Π(1 - P_i)`, System Failure Probability (for series systems): `P_system = ΠP_i`, System Failure Probability (for parallel systems): `P_system = 1 - Π(1 - P_i)`. Example: For a system with two components (failure probabilities 0.1 and 0.2), the failure probability for a parallel configuration is: `P_system = 1 - (1 - 0.1)(1 - 0.2) = 0.28`."
     },
     {
         "id": "RM004",
-        "topic": "Failure Mode and Effects Analysis (FMEA)",
-        "content": "Failure Mode and Effects Analysis (FMEA) is a systematic methodology used to identify potential failure modes, their causes, and their effects on system performance. FMEA helps prioritize risks based on severity, occurrence, and detection of failure modes. It can be extended into Failure Mode, Effects, and Criticality Analysis (FMECA) when criticality rankings are included.",
-        "formulas": [
-            {
-                "description": "Risk Priority Number (RPN) Formula",
-                "formula_latex": "RPN = S \\times O \\times D"
-            },
-            {
-                "description": "Criticality Index Formula (for FMECA)",
-                "formula_latex": "CI = \\lambda \\times t \\times \\beta"
-            }
-        ],
-        "example": "For Severity (S) = 8, Occurrence (O) = 5, and Detection (D) = 4, the Risk Priority Number (RPN) is calculated as: \\\\[ RPN = 8 \\times 5 \\times 4 = 160.\\]",
-        "schema_explanation": "The FMEA worksheet typically includes columns for item reference, function, failure mode, failure cause, effects, severity ranking, occurrence ranking, detection ranking, and calculated RPN. The goal is to identify and mitigate the highest risks early in the design phase."
+        "entry": "**Failure Mode and Effects Analysis (FMEA)**: Failure Mode and Effects Analysis (FMEA) is a systematic methodology used to identify potential failure modes, their causes, and their effects on system performance. It helps prioritize risks based on severity, occurrence, and detection. Formulas include: Risk Priority Number (RPN): `RPN = S × O × D`, Criticality Index (CI): `CI = λ × t × β`. Example: For Severity (S) = 8, Occurrence (O) = 5, and Detection (D) = 4, `RPN = 8 × 5 × 4 = 160`."
     },
     {
         "id": "RM005",
-        "topic": "Common Mode Failure (CMF)",
-        "content": "Common Mode Failure (CMF) occurs when two or more components fail simultaneously due to a shared cause or influencing factor. CMFs are particularly critical in redundant systems where the failure of multiple components can compromise system reliability. CMF analysis is commonly used in industries like nuclear power and aerospace to assess system vulnerabilities.",
-        "formulas": [
-            {
-                "description": "Beta Factor Model for CMF Probability",
-                "formula_latex": "P_{CMF} = \\beta \\times P_{individual}"
-            },
-            {
-                "description": "Miller\u2019s Multiplicity Factor (for shared cause failures)",
-                "formula_latex": "P_{CMF} = 1 - (1 - P_{individual})^n"
-            }
-        ],
-        "example": "Consider a system with two components where the failure probability of each component is 0.01 and the beta factor (common failure ratio) is 0.2. The CMF probability would be calculated as: \\\\[P_{CMF} = 0.2 \\times 0.01 = 0.002.\\]"
+        "entry": "**Common Mode Failure (CMF)**: Common Mode Failure (CMF) occurs when two or more components fail simultaneously due to a shared cause. It is critical in redundant systems where multiple failures can compromise reliability. Formulas include: Beta Factor Model: `P_CMF = β × P_individual`, Miller’s Multiplicity Factor: `P_CMF = 1 - (1 - P_individual)^n`. Example: For two components (failure probability = 0.01) and a beta factor of 0.2, `P_CMF = 0.2 × 0.01 = 0.002`."
     },
     {
         "id": "RM006",
-        "topic": "Hazard Analysis (HA)",
-        "content": "Hazard Analysis (HA) is a structured process used to identify potential hazards and process demands in a system or equipment under control (EUC). The goal is to systematically identify risks, their causes, and consequences to ensure system safety. Hazard analysis considers fault conditions, misuse, extreme environmental factors, human error, and abnormal operating conditions.",
-        "methods": [
-            "Preliminary Hazard Analysis (PHA)",
-            "Hazard and Operability Analysis (HAZOP)",
-            "Failure Modes, Effects, and Criticality Analysis (FMECA)",
-            "Checklist-based Hazard Analysis"
-        ],
-        "outputs": [
-            "A comprehensive list of all potential hazards and process demands within the EUC.",
-            "Identification of the direct causes of each hazard.",
-            "Rough estimation of hazard frequency and likelihood.",
-            "Qualitative assessment of hazard consequences and severity.",
-            "Identification of non-Safety Instrumented System (SIS) protection layers."
-        ]
+        "entry": "**Hazard Analysis (HA)**: Hazard Analysis (HA) is a structured process to identify potential hazards and system demands. Methods include Preliminary Hazard Analysis (PHA), Hazard and Operability Analysis (HAZOP), and FMECA. Outputs comprise a comprehensive hazard list, identification of causes, hazard frequency estimation, qualitative assessment, and non-Safety Instrumented System (SIS) protection layers."
     }
 ]

@@ -111,6 +111,9 @@ class HandMadeRAG(RAG):
             self._populate_db(SEED_PATH, db_path)
         self.db = read_json(self.db_path)
 
+    def push_to_db(self):
+        save_json(self.db, self.db_path)
+
     def _populate_db(self, source_path: str, db_path: str):
         try:
             elements = read_json(source_path)
