@@ -17,6 +17,7 @@ class Logger:
     logger = logging.getLogger("masterclass")
 
     def __init__(self, log_file: str = None):
+        os.makedirs("generated", exist_ok=True)
         self.log_file = log_file
         if self.log_file is not None:
             if os.path.exists(self.log_file):

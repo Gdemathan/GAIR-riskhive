@@ -127,6 +127,7 @@ class HandMadeRAG(RAG):
         except Exception as e:
             logger.error(f"Error while populating the database: {e}")
             os.remove(db_path)
+            raise e
 
     def _get_embedding(self, text: str) -> np.ndarray:
         """
